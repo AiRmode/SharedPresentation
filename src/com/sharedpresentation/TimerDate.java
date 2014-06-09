@@ -30,8 +30,7 @@ public class TimerDate implements Runnable {
                 //Need the guarantee, that data will be sent to all clients
 
                 Map<Session,MySharedPresentation> m = MySharedPresentation.getClientsMap();
-                Set<Session> sSet = m.keySet();
-                for(Session s : sSet){
+                for(Session s : m.keySet()){
                     if (s.isOpen()){
                         MySharedPresentation myPresentation = m.get(s);
                         myPresentation.onMessage("");
