@@ -33,8 +33,8 @@ public class TimerDate implements Runnable {
                 for(Session s : m.keySet()){
                     if (s.isOpen()){
                         MySharedPresentation myPresentation = m.get(s);
-                        myPresentation.onMessage("");
-                        myPresentation.onMessage(ByteBuffer.wrap(new byte[]{0,0}));
+//                        myPresentation.onMessage("");
+//                        myPresentation.onMessage(ByteBuffer.wrap(new byte[]{0,0}));
                     }
                 }
                 /*presentation.onMessage(new Date().toString());

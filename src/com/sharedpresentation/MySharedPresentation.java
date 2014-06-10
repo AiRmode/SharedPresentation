@@ -16,8 +16,8 @@ public class MySharedPresentation {
     private volatile static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
     private volatile static Map<Session, MySharedPresentation> clientsMap = new ConcurrentHashMap<Session, MySharedPresentation>();
 
-    private volatile static TimerDate timer = new TimerDate();
-    private volatile static Thread timerThread = new Thread(timer);
+//    private volatile static TimerDate timer = new TimerDate();
+//    private volatile static Thread timerThread = new Thread(timer);
 
     private volatile boolean allBinaryDataSend = false;
     private volatile boolean allTextDataSend = false;
@@ -29,13 +29,15 @@ public class MySharedPresentation {
 
     public MySharedPresentation() {
         System.out.println("Create new server endpoint class-" + classCounter++);
-        timerThread.setDaemon(true);
+//        timerThread.setDaemon(true);
 //        if (!timerThread.isAlive())
 //            timerThread.start();
     }
 
     @OnOpen
     public void onOpen(Session peer) {
+        //May be Integer.MAX_VALUE
+        peer.setMaxBinaryMessageBufferSize(1000000);
         System.out.println("New peer added");
         peers.add(peer);
         clientsMap.put(peer, this);
@@ -44,13 +46,13 @@ public class MySharedPresentation {
 
     @OnMessage
     public void onMessage(String message) {
-        System.out.println("string, " + message == null);
+        System.out.println("string, " + message.length());
         sendToAll(message);
     }
 
     @OnMessage
     public void onMessage(ByteBuffer message) {
-        System.out.println("binary, " + message == null);
+        System.out.println("binary, " + message.array().length + " type=" + message);
         sendToAll(message);
     }
 
@@ -73,6 +75,13 @@ public class MySharedPresentation {
     }
 
     public void sendToAll(ByteBuffer b) {
+//        if (b != null) {
+//            double[] bArr = b.asDoubleBuffer().array();
+//            for (int i = 0; i < bArr.length; i++) {
+//                System.out.print(bArr[i]+" ");
+//            }
+//            System.out.println();
+//        }
         allBinaryDataSend = false;
         try {
             Iterator<Session> sIterator = peers.iterator();
