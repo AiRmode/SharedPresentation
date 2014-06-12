@@ -24,46 +24,30 @@ function onMessage(message) {
         document.getElementById("chatlog").textContent += message.data + "\n" + "!-----------------------!" + "\n";
     } else {
         console.log("received graphic size: " + message.data.size);
-        ddddd(message.data);
+        drawImageBinary2(message.data);
     }
 }
 
-function ddddd(blob) {
-    var canvas = document.getElementById("myCanvas2");
-    var context = canvas.getContext("2d");
-    var buffer = new ArrayBuffer(blob.size);
-    var bytes = new Uint8Array(buffer);
-    for (var i = 0; i < blob.size; i++) {
-        bytes[i] = blob[i];
-    }
-    console.log('drawImageBinary (bytes.length): ' + bytes.length);
-
-    var imageData = context.createImageData(canvas.width, canvas.height);
-
-    var stop = 1;
-    for (var i = 8; i < imageData.data.length; i++) {
-        imageData.data[i] = bytes[i];
-        if (bytes[i] != 0 && bytes[i] != 255 && stop != 100) {
-            stop++;
-            console.log('byte = ' + i + " " + bytes[i]);
-        }
-    }
-    context.putImageData(imageData, 0, 0);
-
-    var img = document.createElement('img');
-    img.height = canvas.height;
-    img.width = canvas.width;
-    img.src = canvas.toDataURL();
-}
-
-function drawImageBinary(imgString) {
+function drawImageBinary2(imgString) {
     var canvas = document.getElementById("myCanvas2");
     var ctx = canvas.getContext("2d");
 
     var image = new Image();
     image.src = imgString;
     image.onload = function () {
-        ctx.drawImage(image, 0, 0);
+        ctx.drawImage(image, 10, 10);
+    };
+}
+
+function drawImageBinary(imgString) {
+    imgString = 'data:image/gif;base64,R0lGODlhDAAMAOYAANPe5Pz//4KkutDb4szY3/b+/5u5z/3//3KWrfn//8rk8naasYGkuszY4Mbg8qG+0dzv9tXg5sTg8t/o7vP8/4iqv9ft9NPe5qfD1Mfc56O/0YKlu+Lr8M3Z4JCwxuj2/Of0+eDz9+rw9Z68z8/n8sHe8sbT3Ju6zuDv96nE1Onw9Nbh6cvX39Hq89Hq8u77/srW3tbh54Kku8ba56TD1u37/vL8/vL8/9ft9ebu8+Ps8bzM1Ymsw7XR4Nnj6Yanvsnj8qrI2Or2/NTf5tvl68vY3+r3/HqdtNji6OXt8eDz+dLc477c7bDO3t7n7d7v9s3Z4dbs9N/y98Pd6PX+/8/b4f7//+Hp7tDo8vv//+fu84GjunKWro6uxHqctOfu9P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAMAAwAAAeEgCJfg4RfWlo5KlpgjI2OOklWBwcBAVmXCQlXHAUFVBkGBjMUNzZOEy81IF2sXUZCH0QrDyhPGzICAkohUj4XHhoQKQsLGDgWUTFIJxUjUy0uWNIkQxE9W9gMDD9BCgpLAEBNXl5H5F40DlUDEkxc71wICDwlDQBQHQ0EBEUsJjswBgQCADs=';
+    var canvas = document.getElementById("myCanvas3");
+    var ctx = canvas.getContext("2d");
+
+    var image = new Image();
+    image.src = imgString;
+    image.onload = function () {
+        ctx.drawImage(image, 10, 10);
     };
 }
 
@@ -81,13 +65,18 @@ function postBinaryToServer() {
 
 
     var image = ctx.getImageData(0, 0, c.width, c.height);
+    var image2 = 'data:image/gif;base64,R0lGODlhDAAMAOYAANPe5Pz//4KkutDb4szY3/b+/5u5z/3//3KWrfn//8rk8naasYGkuszY4Mbg8qG+0dzv9tXg5sTg8t/o7vP8/4iqv9ft9NPe5qfD1Mfc56O/0YKlu+Lr8M3Z4JCwxuj2/Of0+eDz9+rw9Z68z8/n8sHe8sbT3Ju6zuDv96nE1Onw9Nbh6cvX39Hq89Hq8u77/srW3tbh54Kku8ba56TD1u37/vL8/vL8/9ft9ebu8+Ps8bzM1Ymsw7XR4Nnj6Yanvsnj8qrI2Or2/NTf5tvl68vY3+r3/HqdtNji6OXt8eDz+dLc477c7bDO3t7n7d7v9s3Z4dbs9N/y98Pd6PX+/8/b4f7//+Hp7tDo8vv//+fu84GjunKWro6uxHqctOfu9P///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAAAAAAALAAAAAAMAAwAAAeEgCJfg4RfWlo5KlpgjI2OOklWBwcBAVmXCQlXHAUFVBkGBjMUNzZOEy81IF2sXUZCH0QrDyhPGzICAkohUj4XHhoQKQsLGDgWUTFIJxUjUy0uWNIkQxE9W9gMDD9BCgpLAEBNXl5H5F40DlUDEkxc71wICDwlDQBQHQ0EBEUsJjswBgQCADs=';
     console.log("image data length " + image.data.length);
     var buffer = new ArrayBuffer(image.data.length);
     var bytes = new Uint8Array(buffer);
     for (var i = 0; i < bytes.length; i++) {
         bytes[i] = image.data[i];
     }
-    sendBinary(bytes);
+
+    drawImageBinary(bytes);
+//    ddddd(bytes);
+
+//    sendBinary(bytes);
 }
 
 function sendBinary(bytes) {

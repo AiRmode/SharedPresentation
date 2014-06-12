@@ -56,6 +56,7 @@ public class TimerDate implements Runnable {
 
     private ByteBuffer getBinary() {
         try {
+//            File pictureFile = new File("../res/image.jpg");
             File pictureFile = new File("../res/image.jpg");
             String prefix = "data:image/jpg;base64,";
             byte[] prefixBytes = prefix.getBytes();
