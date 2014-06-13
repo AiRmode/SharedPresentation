@@ -14,24 +14,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MySharedPresentation {
     private volatile static int classCounter = 1;
     private volatile static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
-    private volatile static Map<Session, MySharedPresentation> clientsMap = new ConcurrentHashMap<Session, MySharedPresentation>();
+    private volatile static Map<Session, MySharedPresentation> clientsMap = new HashMap<Session, MySharedPresentation>();
 
-//    private volatile static TimerDate timer = new TimerDate();
-//    private volatile static Thread timerThread = new Thread(timer);
+    private volatile static TimerSender timer = new TimerSender();
+    private volatile static Thread timerThread = new Thread(timer);
 
     private volatile boolean allBinaryDataSend = false;
     private volatile boolean allTextDataSend = false;
 
-    //TODO:Need to create static volatile Queu or thread save list (order is important!) for String messages
+    //TODO:Need to create static volatile Queue or thread save list (order is important!) for String messages
     //and for ByteBuffer messages. Each class will add his received data to this collections
     //and thread timer will send data to all other clients(peers) and delete each record from collection
     //separately after sending!
 
     public MySharedPresentation() {
         System.out.println("Create new server endpoint class-" + classCounter++);
-//        timerThread.setDaemon(true);
-//        if (!timerThread.isAlive())
-//            timerThread.start();
+        if (!timerThread.isAlive()){
+            timerThread.setDaemon(true);
+            timerThread.start();
+        }
+        else
+            System.out.println("Timer has already been started");
     }
 
     @OnOpen
@@ -53,10 +56,9 @@ public class MySharedPresentation {
     @OnMessage
     public void onMessage(ByteBuffer message) {
         System.out.println("binary, " + message.array().length + " type=" + message);
-        sendToAll(message);
     }
 
-    private void sendToAll(String message) {
+    public void sendToAll(String message) {
         allTextDataSend = false;
         try {
             Iterator<Session> sIterator = peers.iterator();
@@ -75,13 +77,6 @@ public class MySharedPresentation {
     }
 
     public void sendToAll(ByteBuffer b) {
-//        if (b != null) {
-//            double[] bArr = b.asDoubleBuffer().array();
-//            for (int i = 0; i < bArr.length; i++) {
-//                System.out.print(bArr[i]+" ");
-//            }
-//            System.out.println();
-//        }
         allBinaryDataSend = false;
         try {
             Iterator<Session> sIterator = peers.iterator();
@@ -121,4 +116,5 @@ public class MySharedPresentation {
     public static Map<Session, MySharedPresentation> getClientsMap() {
         return clientsMap;
     }
+
 }
