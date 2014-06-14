@@ -14,10 +14,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MySharedPresentation {
     private volatile static int classCounter = 1;
     private volatile static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
-    private volatile static Map<Session, MySharedPresentation> clientsMap = new HashMap<Session, MySharedPresentation>();
+    private volatile static Map<Session, MySharedPresentation> clientsMap = new ConcurrentHashMap<Session, MySharedPresentation>();
+    private volatile static Queue<String> textMessagesQueue = new LinkedList<String>();
 
-    private volatile static TimerSender timer = new TimerSender();
-    private volatile static Thread timerThread = new Thread(timer);
+    private volatile static TimerGraphicMsgSender timerGraphicMsgSender = new TimerGraphicMsgSender();
+    private volatile static TimerTextMsgSender timerTextMsgSender = new TimerTextMsgSender();
+    private volatile static Thread timerThread = new Thread(timerGraphicMsgSender);
 
     private volatile boolean allBinaryDataSend = false;
     private volatile boolean allTextDataSend = false;
@@ -50,6 +52,7 @@ public class MySharedPresentation {
     @OnMessage
     public void onMessage(String message) {
         System.out.println("string, " + message.length());
+//        textMessagesQueue.offer(message);
         sendToAll(message);
     }
 
@@ -117,4 +120,7 @@ public class MySharedPresentation {
         return clientsMap;
     }
 
+    public static Queue<String> getTextMessagesQueue() {
+        return textMessagesQueue;
+    }
 }
