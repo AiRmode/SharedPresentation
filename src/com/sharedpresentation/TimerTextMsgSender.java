@@ -7,45 +7,44 @@ import java.util.Map;
 /**
  * Created by Admin on 14.06.14.
  */
-public class TimerTextMsgSender implements Runnable{
-    private final int REFRESH_TIME_DELAY = 500;
+public class TimerTextMsgSender implements Runnable {
+    private final int REFRESH_TIME_DELAY = 200;
+    private final ThreadUtils threadUtils = new ThreadUtils();
 
-    public TimerTextMsgSender(){
+    public TimerTextMsgSender() {
 
     }
 
     @Override
     public void run() {
-        while (true) {
+        boolean flag = ThreadUtils.isTextMsgTimerState();
+        while (flag) {
             try {
                 //Need the guarantee, that data will be sent to all clients
                 Map<Session, MySharedPresentation> peersMap = MySharedPresentation.getClientsMap();
-                System.out.println("In timer there are " + peersMap.size() + " clients");
 
-                String message;
-                while ((message = MySharedPresentation.getTextMessagesQueue().poll()) != null) {
-                    for (Session session : peersMap.keySet()) {
-                        synchronized (this) {
-                            if (session.isOpen()) {
-                                sendTextMsgToClient(session, message);
-                            }
-                        }
-                    }
+                if (MySharedPresentation.getTextMessagesQueue().isEmpty()) {
+                    threadUtils.threadSleep(REFRESH_TIME_DELAY);
+                    continue;
                 }
 
-                Thread.sleep(REFRESH_TIME_DELAY);
-
-            } catch (InterruptedException e) {
+                String message = MySharedPresentation.getTextMessagesQueue().poll();
+                while (message != null) {
+                    for (Session session : peersMap.keySet()) {
+                        boolean sendResult = WSUtils.sendStringMessage(session, message);
+                        while (!sendResult && session != null && session.isOpen()) {
+                            sendResult = WSUtils.sendStringMessage(session, message);
+                            Thread.yield();
+                        }
+                    }
+                    message = MySharedPresentation.getTextMessagesQueue().poll();
+                }
+                threadUtils.threadSleep(REFRESH_TIME_DELAY);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        System.out.println(getClass().getSimpleName() + " exit....");
     }
 
-    private void sendTextMsgToClient(Session s, String s1) {
-        try {
-            s.getBasicRemote().sendText(s1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

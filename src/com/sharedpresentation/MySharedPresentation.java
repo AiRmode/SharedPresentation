@@ -6,7 +6,8 @@ import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**suspect
+/**
+ * suspect
  * Created by Admin on 08.06.14.
  */
 @SuppressWarnings("unused")
@@ -19,7 +20,8 @@ public class MySharedPresentation {
 
     private volatile static TimerGraphicMsgSender timerGraphicMsgSender = new TimerGraphicMsgSender();
     private volatile static TimerTextMsgSender timerTextMsgSender = new TimerTextMsgSender();
-    private volatile static Thread timerThread = new Thread(timerGraphicMsgSender);
+    private volatile static Thread graphicMsgTimerThread = new Thread(timerGraphicMsgSender);
+    private volatile static Thread textMsgTimerThread = new Thread(timerTextMsgSender);
 
     private volatile boolean allBinaryDataSend = false;
     private volatile boolean allTextDataSend = false;
@@ -29,14 +31,24 @@ public class MySharedPresentation {
     //and thread timer will send data to all other clients(peers) and delete each record from collection
     //separately after sending!
 
+    //TODO:add flag, that we will set to "true" when we want to stop all threads!
+
+    static {
+        if (!graphicMsgTimerThread.isAlive()) {
+//            graphicMsgTimerThread.setDaemon(true);
+            graphicMsgTimerThread.start();
+        } else
+            System.out.println("Timer (graphic msg) has already been started");
+
+        if (!textMsgTimerThread.isAlive()) {
+//            textMsgTimerThread.setDaemon(true);
+            textMsgTimerThread.start();
+        } else
+            System.out.println("Timer (text msg) has already been started");
+    }
+
     public MySharedPresentation() {
         System.out.println("Create new server endpoint class-" + classCounter++);
-        if (!timerThread.isAlive()){
-            timerThread.setDaemon(true);
-            timerThread.start();
-        }
-        else
-            System.out.println("Timer has already been started");
     }
 
     @OnOpen
@@ -52,8 +64,7 @@ public class MySharedPresentation {
     @OnMessage
     public void onMessage(String message) {
         System.out.println("string, " + message.length());
-//        textMessagesQueue.offer(message);
-        sendToAll(message);
+        textMessagesQueue.offer(message);
     }
 
     @OnMessage

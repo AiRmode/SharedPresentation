@@ -17,6 +17,7 @@ public class TimerGraphicMsgSender implements Runnable {
     private final String pictureFileName = "image.jpg";
     private final String pictureFilePath = "../res/";
     private final String imagePrefix = "data:image/jpg;base64,";
+    private final ThreadUtils threadUtils = new ThreadUtils();
 
     public TimerGraphicMsgSender() {
 
@@ -24,33 +25,24 @@ public class TimerGraphicMsgSender implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        boolean flag = ThreadUtils.isGraphicMsgTimerState();
+        while (flag) {
             try {
                 //Need the guarantee, that data will be sent to all clients
                 Map<Session, MySharedPresentation> peersMap = MySharedPresentation.getClientsMap();
-                System.out.println("In timer there are " + peersMap.size() + " clients");
 
                 for (Session session : peersMap.keySet()) {
-                    synchronized (this) {
-                        if (session != null && session.isOpen()) {
-                            sendStringDataToClient(session, getGraphicFileBase64Representation());
-                        }
+                    boolean sendResult = WSUtils.sendStringMessage(session, getGraphicFileBase64Representation());
+                    while (!sendResult && session != null && session.isOpen()) {
+                        sendResult = WSUtils.sendStringMessage(session, getGraphicFileBase64Representation());
+                        Thread.yield();
                     }
                 }
-
-                Thread.sleep(REFRESH_TIME_DELAY);
-
-            } catch (InterruptedException e) {
+                threadUtils.threadSleep(REFRESH_TIME_DELAY);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-    }
 
-    private void sendStringDataToClient(Session s, String s1) {
-        try {
-            s.getBasicRemote().sendText(s1);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

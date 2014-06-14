@@ -21,7 +21,7 @@ websocket.onmessage = function (message) {
 function onMessage(message) {
     if (typeof message.data == "string") {
         var searchResult = message.data.search("data:image/png;base64,|data:image/jpg;base64,");
-        if (searchResult != -1) {
+        if (searchResult == 0) {
             drawImageBinary(message.data);
         } else {
             document.getElementById("chatlog").textContent += message.data + "\n" + "!-----------------------!" + "\n";
@@ -38,7 +38,7 @@ function drawImageBinary(imgString) {
     var image = new Image();
     image.src = imgString;
     image.onload = function () {
-        ctx.drawImage(image, 10, 10);
+        ctx.drawImage(image, 0, 0);
     };
 }
 
