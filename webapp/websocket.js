@@ -46,11 +46,15 @@ function drawImageBinary(imgString) {
     ctx.restore();
 
     image.onload = function () {
-        var result = ScaleImage(image.width, image.height, 500, 500, true);
         // resizes image to a target size of 500x500 using letterbox mode
+        var result = scaleImage(image.width, image.height, 500, 500, true);
         ctx.drawImage(image, result.targetleft, result.targettop, result.width, result.height);
-//        ctx.drawImage(image, 0, 0);
     };
+
+}
+
+function showOriginaImage(){
+    console.log("You have clicked on image");
 }
 
 function postTextMessageToServer() {
@@ -90,7 +94,7 @@ function writeToScreen(message) {
     output.innerHTML += message + "<br>";
 }
 
-function ScaleImage(srcwidth, srcheight, targetwidth, targetheight, fLetterBox) {
+function scaleImage(srcwidth, srcheight, targetwidth, targetheight, fLetterBox) {
 
     var result = { width: 0, height: 0, fScaleToTargetWidth: true };
 
