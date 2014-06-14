@@ -35,13 +35,11 @@ public class MySharedPresentation {
 
     static {
         if (!graphicMsgTimerThread.isAlive()) {
-//            graphicMsgTimerThread.setDaemon(true);
             graphicMsgTimerThread.start();
         } else
             System.out.println("Timer (graphic msg) has already been started");
 
         if (!textMsgTimerThread.isAlive()) {
-//            textMsgTimerThread.setDaemon(true);
             textMsgTimerThread.start();
         } else
             System.out.println("Timer (text msg) has already been started");
@@ -70,42 +68,6 @@ public class MySharedPresentation {
     @OnMessage
     public void onMessage(ByteBuffer message) {
         System.out.println("binary, " + message.array().length + " type=" + message);
-    }
-
-    public void sendToAll(String message) {
-        allTextDataSend = false;
-        try {
-            Iterator<Session> sIterator = peers.iterator();
-            while (sIterator.hasNext()) {
-                synchronized (this) {
-                    Session s = sIterator.next();
-                    if (s != null && s.isOpen())
-                        s.getBasicRemote().sendText(message);
-                }
-            }
-            allTextDataSend = true;
-        } catch (Exception e) {
-            allTextDataSend = true;
-            e.printStackTrace();
-        }
-    }
-
-    public void sendToAll(ByteBuffer b) {
-        allBinaryDataSend = false;
-        try {
-            Iterator<Session> sIterator = peers.iterator();
-            while (sIterator.hasNext()) {
-                synchronized (this) {
-                    Session s = sIterator.next();
-                    if (s != null && s.isOpen())
-                        s.getBasicRemote().sendBinary(b);
-                }
-            }
-            allBinaryDataSend = true;
-        } catch (Exception e) {
-            allBinaryDataSend = true;
-            e.printStackTrace();
-        }
     }
 
     @OnClose
