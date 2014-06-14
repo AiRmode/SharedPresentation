@@ -5,6 +5,8 @@
 var wsURI = "ws://" + document.location.host + document.location.pathname + "sharedpresentation";
 var websocket = new WebSocket(wsURI);
 var output = document.getElementById("output");
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
 
 websocket.onopen = function (evt) {
     onOpen(evt);
@@ -32,13 +34,22 @@ function onMessage(message) {
 }
 
 function drawImageBinary(imgString) {
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-
     var image = new Image();
     image.src = imgString;
+
+    // Store the current transformation matrix
+    ctx.save();
+    // Use the identity matrix while clearing the canvas
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Restore the transform
+    ctx.restore();
+
     image.onload = function () {
-        ctx.drawImage(image, 0, 0);
+        var result = ScaleImage(image.width, image.height, 500, 500, true);
+        // resizes image to a target size of 500x500 using letterbox mode
+        ctx.drawImage(image, result.targetleft, result.targettop, result.width, result.height);
+//        ctx.drawImage(image, 0, 0);
     };
 }
 
@@ -50,9 +61,9 @@ function postTextMessageToServer() {
 function postBinaryToServer() {
     console.log("postBinaryToServer");
     var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
+    var ctx1 = c.getContext("2d");
 
-    var image = ctx.getImageData(10, 10, c.width, c.height);
+    var image = ctx1.getImageData(10, 10, c.width, c.height);
     console.log("image data length " + image.data.length);
     var buffer = new ArrayBuffer(image.data.length);
     var bytes = new Uint8Array(buffer);
@@ -77,4 +88,45 @@ function onError(evt) {
 
 function writeToScreen(message) {
     output.innerHTML += message + "<br>";
+}
+
+function ScaleImage(srcwidth, srcheight, targetwidth, targetheight, fLetterBox) {
+
+    var result = { width: 0, height: 0, fScaleToTargetWidth: true };
+
+    if ((srcwidth <= 0) || (srcheight <= 0) || (targetwidth <= 0) || (targetheight <= 0)) {
+        return result;
+    }
+
+    // scale to the target width
+    var scaleX1 = targetwidth;
+    var scaleY1 = (srcheight * targetwidth) / srcwidth;
+
+    // scale to the target height
+    var scaleX2 = (srcwidth * targetheight) / srcheight;
+    var scaleY2 = targetheight;
+
+    // now figure out which one we should use
+    var fScaleOnWidth = (scaleX2 > targetwidth);
+    if (fScaleOnWidth) {
+        fScaleOnWidth = fLetterBox;
+    }
+    else {
+        fScaleOnWidth = !fLetterBox;
+    }
+
+    if (fScaleOnWidth) {
+        result.width = Math.floor(scaleX1);
+        result.height = Math.floor(scaleY1);
+        result.fScaleToTargetWidth = true;
+    }
+    else {
+        result.width = Math.floor(scaleX2);
+        result.height = Math.floor(scaleY2);
+        result.fScaleToTargetWidth = false;
+    }
+    result.targetleft = Math.floor((targetwidth - result.width) / 2);
+    result.targettop = Math.floor((targetheight - result.height) / 2);
+
+    return result;
 }
