@@ -73,10 +73,15 @@ public class MySharedPresentation {
     @OnClose
     public void onClose(Session peer) {
         synchronized (this) {
-            if (peers.contains(peer))
-                peers.remove(peer);
-            if (clientsMap.containsKey(peer))
-                clientsMap.remove(peer);
+            try {
+                if (peers.contains(peer))
+                    peers.remove(peer);
+                if (clientsMap.containsKey(peer))
+                    clientsMap.remove(peer);
+                peer.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             System.out.println("Peer closed. Only " + peers.size() + " connections still exist.");
         }
     }
