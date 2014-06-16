@@ -93,10 +93,10 @@ public class MySharedPresentation {
     private void sendCurrentPicture(Session peer) {
         try {
             boolean sendResult = WSUtils.sendStringMessage(peer, graphicFileUtils.getGraphicFileBase64Representation());
-            while (sendResult && peer!= null && peer.isOpen()){
+            while (!sendResult && peer != null && peer.isOpen()) {
                 sendResult = WSUtils.sendStringMessage(peer, graphicFileUtils.getGraphicFileBase64Representation());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
