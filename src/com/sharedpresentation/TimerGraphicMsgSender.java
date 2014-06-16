@@ -11,6 +11,7 @@ public class TimerGraphicMsgSender implements Runnable {
     private final int REFRESH_TIME_DELAY = 5000;
     private final ThreadUtils threadUtils = new ThreadUtils();
     private GraphicFileUtils graphicFileUtils = new GraphicFileUtils();
+    private volatile String prevPicture = "";
 
     public TimerGraphicMsgSender() {
 
@@ -24,10 +25,21 @@ public class TimerGraphicMsgSender implements Runnable {
                 //Need the guarantee, that data will be sent to all clients
                 Map<Session, MySharedPresentation> peersMap = MySharedPresentation.getClientsMap();
 
+                String newPicture;
                 for (Session session : peersMap.keySet()) {
-                    boolean sendResult = WSUtils.sendStringMessage(session, graphicFileUtils.getGraphicFileBase64Representation());
+                    newPicture = graphicFileUtils.getGraphicFileBase64Representation();
+
+                    if (prevPicture == null || newPicture == null)
+                        break;
+
+                    if (prevPicture.equals(newPicture))
+                        break;
+                    else
+                        prevPicture = newPicture;
+
+                    boolean sendResult = WSUtils.sendStringMessage(session, newPicture);
                     while (!sendResult && session != null && session.isOpen()) {
-                        sendResult = WSUtils.sendStringMessage(session, graphicFileUtils.getGraphicFileBase64Representation());
+                        sendResult = WSUtils.sendStringMessage(session, newPicture);
                         Thread.yield();
                     }
                 }
