@@ -26,6 +26,8 @@ public class MySharedPresentation {
     private volatile boolean allBinaryDataSend = false;
     private volatile boolean allTextDataSend = false;
 
+    private GraphicFileUtils graphicFileUtils = new GraphicFileUtils();
+
     //TODO:Need to create static volatile Queue or thread save list (order is important!) for String messages
     //and for ByteBuffer messages. Each class will add his received data to this collections
     //and thread timer will send data to all other clients(peers) and delete each record from collection
@@ -57,6 +59,8 @@ public class MySharedPresentation {
         peers.add(peer);
         clientsMap.put(peer, this);
         System.out.println(peers.size() + " active peers");
+
+        sendCurrentPicture(peer);
     }
 
     @OnMessage
@@ -83,6 +87,17 @@ public class MySharedPresentation {
                 e.printStackTrace();
             }
             System.out.println("Peer closed. Only " + peers.size() + " connections still exist.");
+        }
+    }
+
+    private void sendCurrentPicture(Session peer) {
+        try {
+            boolean sendResult = WSUtils.sendStringMessage(peer, graphicFileUtils.getGraphicFileBase64Representation());
+            while (sendResult && peer!= null && peer.isOpen()){
+                sendResult = WSUtils.sendStringMessage(peer, graphicFileUtils.getGraphicFileBase64Representation());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
