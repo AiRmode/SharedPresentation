@@ -14,7 +14,8 @@ public class WSUtils {
         try {
             synchronized (lock) {
                 isSendingInProgress = true;
-                session.getBasicRemote().sendText(message);
+                if(session.isOpen())
+                    session.getBasicRemote().sendText(message);
                 isSendingInProgress = false;
                 result = true;
             }

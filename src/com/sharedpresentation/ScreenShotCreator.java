@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
  * Created by Admin on 16.06.14.
  */
 public class ScreenShotCreator extends Application {
+//    private static String path_to_image = "D:\\Java\\wildfly-8.1.0.Final\\wildfly-8.1.0.Final\\res\\";
     private static String path_to_image = "D:\\Java\\TomCats\\apache-tomcat-8.0.8\\res\\";
     private int sX = -1, fX = -1;
     private int sY = -1, fY = -1;
@@ -145,7 +146,7 @@ public class ScreenShotCreator extends Application {
             BufferedImage bufferedImage = new Robot().createScreenCapture(screenRect);
 //            ImageIO.write(bufferedImage, "jpg", new File("screens/image" + ".jpg"));
             ImageIO.write(bufferedImage, "jpg", new File(path_to_image + "image" + ".jpg"));
-            Thread.sleep(1500);
+            Thread.sleep(500);
         } catch (AWTException e) {
             e.printStackTrace();
         } catch (IOException e) {
