@@ -7,6 +7,7 @@ var websocket = new WebSocket(wsURI);
 var output = document.getElementById("output");
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+var savedImage = "";
 
 websocket.onopen = function (evt) {
     onOpen(evt);
@@ -24,6 +25,7 @@ function onMessage(message) {
     if (typeof message.data == "string") {
         var searchResult = message.data.search("data:image/png;base64,|data:image/jpg;base64,");
         if (searchResult == 0) {
+            savedImage = message.data;
             drawImageBinary(message.data);
         } else {
             document.getElementById("chatlog").textContent += message.data + "\n" + "!-----------------------!" + "\n";
@@ -53,8 +55,19 @@ function drawImageBinary(imgString) {
 
 }
 
-function showOriginaImage(){
+(document).ready(function () {
+    ('.image-link').magnificPopup({type: 'image'});
+});
+
+('.test-popup-link').magnificPopup({
+    type: 'image'
+    // other options
+});
+
+function showOriginaImage() {
     console.log("You have clicked on image");
+
+    console.log("finish You have clicked on image")
 }
 
 function postTextMessageToServer() {
