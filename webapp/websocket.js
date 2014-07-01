@@ -55,19 +55,23 @@ function drawImageBinary(imgString) {
 
 }
 
-(document).ready(function () {
-    ('.image-link').magnificPopup({type: 'image'});
-});
-
-('.test-popup-link').magnificPopup({
-    type: 'image'
-    // other options
-});
+//(document).ready(function () {
+//    ('.image-link').magnificPopup({type: 'image'});
+//});
+//
+//('.test-popup-link').magnificPopup({
+//    type: 'image'
+//    // other options
+//});
 
 function showOriginaImage() {
     console.log("You have clicked on image");
+//    $(document).ready(function() {
+//        $('http://blog.jimdo.com/wp-content/uploads/2014/01/tree-247122.jpg').magnificPopup({type:'image'});
+//    });
 
-    console.log("finish You have clicked on image")
+
+    console.log("finish You have clicked on image");
 }
 
 function postTextMessageToServer() {
