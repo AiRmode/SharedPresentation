@@ -5,25 +5,39 @@
     <title>Hello WebSocket!</title>
 </head>
 <body>
-    <h1>My Shared Presentation</h1>
-    <canvas id="myCanvas" width="500" height="500" onclick="showOriginaImage()" style="border: 1px solid #409401;"></canvas>
-    <textarea id="chatlog" rows="16" cols="44"></textarea><br/>
-    <input id="msg" type="text"/>
-    <button type="submit" id="sendButton" onClick="postTextMessageToServer()">Send message</button>
-    <br>
-    <a class="test-popup-link" href="sport_soccer.jpg">Open popup</a>
+<h1>My Shared Presentation</h1>
+<canvas id="myCanvas" width="500" height="500" onclick="showOriginaImage()" style="border: 1px solid #409401;"></canvas>
+<textarea id="chatlog" rows="16" cols="44"></textarea><br/>
+<input id="msg" type="text"/>
+<button type="submit" id="sendButton" onClick="postTextMessageToServer()">Send message</button>
+<br>
+<a class="test-popup-link" href="sport_soccer.jpg">Open popup</a>
 
-    <div id="output"></div>
-    <script type="text/javascript" src="./websocket.js"></script>
-    <link rel="stylesheet" href="./magnific-popup.css">
-    <script src="./jquery.magnific-popup.js"></script>
-    <script src="./jquery-2.1.1.min.js"></script>
+<div id="output"></div>
+<script type="text/javascript" src="./websocket.js"></script>
+<link rel="stylesheet" href="./magnific-popup.css">
+<script type="text/javascript" src="./jquery.magnific-popup.js"></script>
+<script type="text/javascript" src="./jquery-2.1.1.min.js"></script>
 
-    <script>
-        $('.test-popup-link').magnificPopup({
-            type: 'image'
-            // other options
-        });
-    </script>
+<script>
+    if ($ === undefined) {
+        console.log('jQuery не подключён.');
+    } else {
+        console.log('Версия jQuery: ' + $.fn.jquery);
+    }
+</script>
+
+<script>
+    $('.test-popup-link').magnificPopup({
+        type: 'image'
+        // other options
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('body').append('<br/>Этот текст добавлен с помощью jQuery');
+    });
+</script>
 </body>
 </html>
