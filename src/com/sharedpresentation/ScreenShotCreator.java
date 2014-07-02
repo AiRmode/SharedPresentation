@@ -38,6 +38,8 @@ public class ScreenShotCreator extends Application {
     private int width = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private Timer timer2 = null;
     private TimerTask task = null;
+    private static double xOffset = 0;
+    private static double yOffset = 0;
     private static int imgCounter = 0;
 
     public static void main(String[] args) {
@@ -46,13 +48,31 @@ public class ScreenShotCreator extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(final Stage stage) throws Exception {
         Stage control = new Stage();
 
-        stage.initStyle(StageStyle.DECORATED);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setOpacity(0.1f);
 
         Group rootGroup = new Group();
+
+        EventHandler<ActionEvent> setFullScreen = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                stage.setFullScreen(true);
+            }
+
+        };
+        final Button fullScreen = createButton("Full screen", setFullScreen);
+
+        EventHandler<ActionEvent> setExitEvent = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+                System.exit(0);
+            }
+
+        };
+        final Button exit = createButton("Exit", setExitEvent);
 
         EventHandler<ActionEvent> setCoordinatEvent = new EventHandler<ActionEvent>() {
             @Override
@@ -90,7 +110,7 @@ public class ScreenShotCreator extends Application {
         final Button stopGettingPicture = createButton("stop getting jpg...", stopGettingPictureEvent);
 
         VBox vBox = createVBox();
-        vBox.getChildren().addAll(setCoordinat, startGettingPicture, stopGettingPicture);
+        vBox.getChildren().addAll(setCoordinat, startGettingPicture, stopGettingPicture, fullScreen, exit);
 
         javafx.scene.shape.Rectangle rect2 = RectangleBuilder.create()
                 .arcWidth(30).arcHeight(30).fill(Color.color(0, 1, 1, 0.01)).x(10).y(160)
@@ -130,12 +150,34 @@ public class ScreenShotCreator extends Application {
             }
         });
         scene.setFill(Color.TRANSPARENT);
-        control.setScene(new Scene(rootGroup, 200, 100));
+        control.setScene(new Scene(rootGroup, 200, 150));
         control.show();
         control.setX(scene.getX() / 2);
         control.setY(scene.getY());
+
+        scene.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = stage.getX() - event.getScreenX();
+                yOffset = stage.getY() - event.getScreenY();
+            }
+        });
+
+        scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() + xOffset);
+                stage.setY(event.getScreenY() + yOffset);
+            }
+        });
+
+        ResizeListener listener = new ResizeListener(stage,scene);
+        scene.setOnMouseMoved(listener);
+        scene.setOnMousePressed(listener);
+        scene.setOnMouseDragged(listener);
+
         stage.setScene(scene);
-        stage.setFullScreen(false);
+//        stage.setFullScreen(false);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
