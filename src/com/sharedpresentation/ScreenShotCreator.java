@@ -155,29 +155,12 @@ public class ScreenShotCreator extends Application {
         control.setX(scene.getX() / 2);
         control.setY(scene.getY());
 
-        scene.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-            }
-        });
-
-        scene.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
-        });
-
-        ResizeListener listener = new ResizeListener(stage,scene);
+        ResizeListener listener = new ResizeListener(stage, scene);
         scene.setOnMouseMoved(listener);
         scene.setOnMousePressed(listener);
         scene.setOnMouseDragged(listener);
 
         stage.setScene(scene);
-//        stage.setFullScreen(false);
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {

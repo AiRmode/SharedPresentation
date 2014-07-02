@@ -10,21 +10,20 @@ import javafx.stage.Stage;
  * Created by alshevchuk on 02.07.2014.
  */
 public class ResizeListener implements EventHandler<MouseEvent> {
-    double dx;
-    double dy;
-    double deltaX;
-    double deltaY;
-    double border = 10;
-    boolean moveH;
-    boolean moveV;
-    boolean resizeH = false;
-    boolean resizeV = false;
+    private double dx;
+    private double dy;
+    private double deltaX;
+    private double deltaY;
+    private static double border = 10;
+    private boolean moveH;
+    private boolean moveV;
+    private boolean resizeH = false;
+    private boolean resizeV = false;
     private Scene scene;
     private Stage stage;
 
     double minSizeWidth = 100;
     double minSizeHeight = 100;
-
 
     private static double xOffset = 0;
     private static double yOffset = 0;
@@ -141,5 +140,9 @@ public class ResizeListener implements EventHandler<MouseEvent> {
                 stage.setY(t.getScreenY() + yOffset);
             }
         }
+    }
+
+    public static double getBorder() {
+        return border;
     }
 }
