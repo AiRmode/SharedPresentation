@@ -3,6 +3,11 @@
 <head>
     <meta charset=UTF-8>
     <title>Hello WebSocket!</title>
+
+    <link rel="stylesheet" href="magnific-popup.css">
+    <script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="jquery.magnific-popup.js"></script>
+
 </head>
 <body>
 <h1>My Shared Presentation</h1>
@@ -11,37 +16,14 @@
 <input id="msg" type="text"/>
 <button type="submit" id="sendButton" onClick="postTextMessageToServer()">Send message</button>
 <br>
-<a class="test-popup-link" href="sport_soccer.jpg">Open popup</a>
-<a class="magnific" href="sport_soccer.jpg">Title goes here</a><a
-        href="http://blog.jimdo.com/wp-content/uploads/2014/01/tree-247122.jpg">Outside link</a><br>
-
-<a class="image-popup-vertical-fit" href="sport_soccer.jpg" title="Title">
-        <img src="f35.jpg">
-</a>
-
 <div id="output"></div>
-<script type="text/javascript" src="./websocket.js"></script>
-<link rel="stylesheet" href="./magnific-popup.css">
-<script type="text/javascript" src="./jquery.magnific-popup.js"></script>
-<script type="text/javascript" src="./jquery-2.1.1.min.js"></script>
 
-<script type="text/javascript">
-    $(function () {
-        $(".magnific").magnificPopup({type: 'image/jpeg'});
-    });
-</script>
+<script type="text/javascript" src="websocket.js"></script>
 
-<script>
-    if ($ === undefined) {
-        console.log('jQuery не подключён.');
-    } else {
-        console.log('Версия jQuery: ' + $.fn.jquery);
-    }
-</script>
+<a class="image-popup-vertical-fit" href="sport_soccer.jpg" title="Title"> <img src="f35.jpg"></a>
 
 <script>
     $(document).ready(function() {
-
         $('.image-popup-vertical-fit').magnificPopup({
             type: 'image',
             closeOnContentClick: true,
@@ -49,16 +31,10 @@
             image: {
                 verticalFit: true
             }
-
         });
 
     });
 </script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('body').append('<br/>Этот текст добавлен с помощью jQuery');
-    });
-</script>
 </body>
 </html>
