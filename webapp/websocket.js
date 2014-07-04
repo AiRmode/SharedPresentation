@@ -42,9 +42,6 @@ function drawImageBinary(imgString) {
     var image = new Image();
     image.src = imgString;
 
-//    canvas.width = defCanvWidth;
-//    canvas.height = defCanvHeight;
-
     // Store the current transformation matrix
     ctx.save();
     // Use the identity matrix while clearing the canvas
@@ -71,27 +68,7 @@ function showOriginaImage() {
         canvas.width = defCanvWidth;
         canvas.height = defCanvHeight;
 
-        var cnv = document.getElementById('myCanvas');
-
-        if (!cnv || !cnv.getContext) {
-            return;
-        }
-
-        if (cnv && cnv.getContext) {
-            var scr = cnv.getContext('2d');
-            if (!scr) {
-                return;
-            }
-        }
-
-        scr.fillStyle = '#00';
-        scr.fillRect(0, 0, cnv.width, cnv.height);
-
-        img.onload = function () {
-//            scr.drawImage(img, 0, 0, cnv.width, cnv.height);
-            var result = scaleImage(img.width, img.height, cnv.width, cnv.height, true);
-            scr.drawImage(img, result.targetleft, result.targettop, result.width, result.height);
-        }
+        drawImageBinary(savedImage);
 
     } else if (isOriginalImage) {
         isOriginalImage = false;
@@ -117,26 +94,7 @@ function showOriginaImage() {
         img.onload = function () {
             scr.drawImage(img, 0, 0, cnv.width, cnv.height);
         }
-    }
 
-    var cnv = document.getElementById('myCanvas');
-
-    if (!cnv || !cnv.getContext) {
-        return;
-    }
-
-    if (cnv && cnv.getContext) {
-        var scr = cnv.getContext('2d');
-        if (!scr) {
-            return;
-        }
-    }
-
-    scr.fillStyle = '#00';
-    scr.fillRect(0, 0, cnv.width, cnv.height);
-
-    img.onload = function () {
-        scr.drawImage(img, 0, 0, cnv.width, cnv.height);
     }
 
     console.log("finish You have clicked on image");
@@ -161,10 +119,6 @@ function postBinaryToServer() {
     }
 
     sendBinary(buffer);
-}
-
-function getFullPicture() {
-
 }
 
 function sendBinary(bytes) {
