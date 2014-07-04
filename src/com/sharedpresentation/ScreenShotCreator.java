@@ -29,7 +29,8 @@ import java.net.InetAddress;
 public class ScreenShotCreator extends Application {
     //    private static String path_to_image = "D:\\Java\\wildfly-8.1.0.Final\\wildfly-8.1.0.Final\\res\\";
 //    private static String path_to_image = "D:\\Java\\TomCats\\apache-tomcat-8.0.8\\res\\";
-    private static String path_to_image = "D:\\java-data\\apache-tomcat-8.0.8\\apache-tomcat-8.0.8\\res\\";
+//    private static String path_to_image = "D:\\java-data\\apache-tomcat-8.0.8\\apache-tomcat-8.0.8\\res\\";
+    private static String path_to_image = "server/res/";
     private int start_X = -1, final_X = -1;
     private int start_Y = -1, final_Y = -1;
     protected boolean firstCoordinats = true;
@@ -40,8 +41,9 @@ public class ScreenShotCreator extends Application {
     private volatile boolean isDoCapture = true;
     private final long capturingDelay = 500;
     private final long idleCheckDelay = 500;
-    private final String runTomCatCmd = "/server/bin/startup.bat";
-    private final String stopTomCatCmd = "/server/bin/shutdown.bat";
+    private final String runTomCatCmd = RunInCmd.getPath()+"server/bin/startup.bat";
+//    private final String runTomCatCmd = "runServer.bat";
+    private final String stopTomCatCmd = RunInCmd.getPath()+"server/bin/shutdown.bat";
     private final String presentationStageTitle = "Shared Presentation";
     private final String controlStageTitle = "Control Presentation";
     private String fullServerLink = "http://" + getLocalIP() + ":8080" + "\n\n";
@@ -81,6 +83,7 @@ public class ScreenShotCreator extends Application {
         EventHandler<ActionEvent> setExitEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
+                new RunInCmd().runInCmd(stopTomCatCmd);
                 System.exit(0);
             }
 
@@ -105,10 +108,10 @@ public class ScreenShotCreator extends Application {
                 // start timer
                 if (isTimerStopped) {
                     isTimerStopped = false;
-                    new RunInCmd().runInCmd(runTomCatCmd);
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            new RunInCmd().runInCmd(runTomCatCmd);
                             while (true) {
                                 while (isDoCapture) {
                                     getScreen(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());

@@ -26,15 +26,34 @@
         <delete file="${GUI.jar.name}"/>
     </target>
 
-    <manifest file="MANIFEST.MF">
-        <attribute name="Main-Class" value="$com.sharedpresentation.ScreenShotCreator"/>
-    </manifest>
+    <target name="make.gui.jar" depends="compile">
 
-    <jar jarfile="SPGUI" manifest="MANIFEST.MF">
-        <fileset dir="${bin}">
-            <include name="**/ScreenShotCreator.class"/>
-            <include name="**/RunInCmd.class"/>
-        </fileset>
-    </jar>
+        <pathconvert property="mf.classpath" pathsep=" ">
+            <mapper>
+                <chainedmapper>
+                    <flattenmapper/>
+                    <globmapper from="*.jar" to="./lib/*.jar"/>
+                </chainedmapper>
+            </mapper>
+            <path refid="classpath"/>
+        </pathconvert>
+
+        <manifest file="MANIFEST.MF">
+            <attribute name="Main-Class" value="${manifest.main.class}"/>
+            <attribute name="Class-Path" value="${mf.classpath}" />
+        </manifest>
+
+        <jar jarfile="${GUI.jar.name}" manifest="MANIFEST.MF">
+            <fileset dir="${bin}">
+                <include name="**/*.class"/>
+            </fileset>
+            <zipgroupfileset dir="${lib}">
+                <include name="jfxrt.jar"/>
+            </zipgroupfileset>
+        </jar>
+
+        <delete file="MANIFEST.MF"/>
+
+    </target>
 
 </project>
