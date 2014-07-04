@@ -8,6 +8,9 @@ var output = document.getElementById("output");
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var savedImage = "";
+var isOriginalImage = true;
+var defCanvHeight = 500;
+var defCanvWidth = 500;
 
 websocket.onopen = function (evt) {
     onOpen(evt);
@@ -39,6 +42,9 @@ function drawImageBinary(imgString) {
     var image = new Image();
     image.src = imgString;
 
+//    canvas.width = defCanvWidth;
+//    canvas.height = defCanvHeight;
+
     // Store the current transformation matrix
     ctx.save();
     // Use the identity matrix while clearing the canvas
@@ -56,7 +62,63 @@ function drawImageBinary(imgString) {
 }
 
 function showOriginaImage() {
+    var img = new Image();
+    img.src = savedImage;
+
     console.log("You have clicked on image");
+    if (!isOriginalImage) {
+        isOriginalImage = true;
+        canvas.width = defCanvWidth;
+        canvas.height = defCanvHeight;
+
+        var cnv = document.getElementById('myCanvas');
+
+        if (!cnv || !cnv.getContext) {
+            return;
+        }
+
+        if (cnv && cnv.getContext) {
+            var scr = cnv.getContext('2d');
+            if (!scr) {
+                return;
+            }
+        }
+
+        scr.fillStyle = '#00';
+        scr.fillRect(0, 0, cnv.width, cnv.height);
+
+        img.onload = function () {
+//            scr.drawImage(img, 0, 0, cnv.width, cnv.height);
+            var result = scaleImage(img.width, img.height, cnv.width, cnv.height, true);
+            scr.drawImage(img, result.targetleft, result.targettop, result.width, result.height);
+        }
+
+    } else if (isOriginalImage) {
+        isOriginalImage = false;
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var cnv = document.getElementById('myCanvas');
+
+        if (!cnv || !cnv.getContext) {
+            return;
+        }
+
+        if (cnv && cnv.getContext) {
+            var scr = cnv.getContext('2d');
+            if (!scr) {
+                return;
+            }
+        }
+
+        scr.fillStyle = '#00';
+        scr.fillRect(0, 0, cnv.width, cnv.height);
+
+        img.onload = function () {
+            scr.drawImage(img, 0, 0, cnv.width, cnv.height);
+        }
+    }
+
     var cnv = document.getElementById('myCanvas');
 
     if (!cnv || !cnv.getContext) {
@@ -70,16 +132,10 @@ function showOriginaImage() {
         }
     }
 
-    var img = new Image();
-    img.src = savedImage;
-
-    canvas.width = img.width;
-    canvas.height = img.height;
-
     scr.fillStyle = '#00';
     scr.fillRect(0, 0, cnv.width, cnv.height);
 
-    img.onload = function() {
+    img.onload = function () {
         scr.drawImage(img, 0, 0, cnv.width, cnv.height);
     }
 
@@ -107,7 +163,7 @@ function postBinaryToServer() {
     sendBinary(buffer);
 }
 
-function getFullPicture(){
+function getFullPicture() {
 
 }
 
