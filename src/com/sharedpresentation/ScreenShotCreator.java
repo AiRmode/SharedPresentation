@@ -49,7 +49,7 @@ public class ScreenShotCreator extends Application {
 
     @Override
     public void start(final Stage stage) throws Exception {
-        Stage control = new Stage();
+        final Stage control = new Stage();
 
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setOpacity(0.1f);
@@ -60,6 +60,8 @@ public class ScreenShotCreator extends Application {
             @Override
             public void handle(ActionEvent arg0) {
                 stage.setFullScreen(true);
+                stage.toBack();
+                control.toFront();
             }
 
         };
@@ -91,7 +93,7 @@ public class ScreenShotCreator extends Application {
                 timer2 = new java.util.Timer();
                 task = new TimerTask() {
                     public void run() {
-                        getScreen(start_X, start_Y, final_X, final_Y);
+                        getScreen(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
                     }
                 };
                 timer2.schedule(task, 0, 500);
@@ -182,7 +184,7 @@ public class ScreenShotCreator extends Application {
 
     public static void getScreen(double xs, double ys, double xf, double yf) {
         Rectangle screenRect = new Rectangle();
-        screenRect.setBounds((int) xs, (int) ys, ((int) (xf - xs)), ((int) (yf - ys)));
+        screenRect.setBounds((int) xs, (int) ys, ((int) (xf)), ((int) (yf)));
         try {
             BufferedImage bufferedImage = new Robot().createScreenCapture(screenRect);
             ImageIO.write(bufferedImage, "jpg", new File(path_to_image + "image" + ".jpg"));

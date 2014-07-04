@@ -11,7 +11,8 @@
 </head>
 <body>
 <h1>My Shared Presentation</h1>
-<canvas id="myCanvas" width="500" height="500" onclick="showOriginaImage()" style="border: 1px solid #409401;"></canvas>
+<canvas class="image-popup-vertical-fit" id="myCanvas" width="500" height="500" style="border: 1px solid #409401;"></canvas>
+
 <textarea id="chatlog" rows="16" cols="44"></textarea><br/>
 <input id="msg" type="text"/>
 <button type="submit" id="sendButton" onClick="postTextMessageToServer()">Send message</button>
@@ -21,6 +22,7 @@
 <script type="text/javascript" src="websocket.js"></script>
 
 <a class="image-popup-vertical-fit" href="sport_soccer.jpg" title="Title"> <img src="f35.jpg"></a>
+
 
 <script>
     $(document).ready(function() {
