@@ -60,7 +60,7 @@ public class ScreenShotCreator extends Application {
         control.setTitle(controlStageTitle);
         stage.setTitle(presentationStageTitle);
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.setOpacity(0.1f);
+        stage.setOpacity(0.3f);
 
         Group rootGroup = new Group();
 
