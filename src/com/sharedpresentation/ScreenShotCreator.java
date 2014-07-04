@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -20,6 +21,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 
 /**
  * Created by Admin on 16.06.14.
@@ -36,10 +38,11 @@ public class ScreenShotCreator extends Application {
     private int width = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     private boolean isTimerStopped = true;
     private boolean isDoCapture = true;
-    private final long capturingDelay=500;
-    private final long idleCheckDelay=500;
+    private final long capturingDelay = 500;
+    private final long idleCheckDelay = 500;
     private final String presentationStageTitle = "Shared Presentation";
     private final String controlStageTitle = "Control Presentation";
+    private String fullServerLink = "http://" + getLocalIP() + ":8080" + "\n\n";
 
     public static void main(String[] args) {
         //TODO: make file transfer via socket
@@ -105,9 +108,9 @@ public class ScreenShotCreator extends Application {
                             while (true) {
                                 while (isDoCapture) {
                                     getScreen(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
-                                    sleep(Thread.currentThread(),capturingDelay);
+                                    sleep(Thread.currentThread(), capturingDelay);
                                 }
-                                sleep(Thread.currentThread(),idleCheckDelay);
+                                sleep(Thread.currentThread(), idleCheckDelay);
                             }
                         }
                     });
@@ -128,8 +131,12 @@ public class ScreenShotCreator extends Application {
         final Button stopGettingPicture = createButton("stop getting jpg...", stopGettingPictureEvent);
 
 
+        TextField ipAdress = new TextField();
+        ipAdress.setStyle("-fx-font: 22px \"Arial\";");
+        ipAdress.setText(fullServerLink);
+
         VBox vBox = createVBox();
-        vBox.getChildren().addAll(startGettingPicture, stopGettingPicture, fullScreen, exit);
+        vBox.getChildren().addAll(ipAdress, startGettingPicture, stopGettingPicture, fullScreen, exit);
 
 
         javafx.scene.shape.Rectangle rect2 = RectangleBuilder.create()
@@ -170,7 +177,7 @@ public class ScreenShotCreator extends Application {
             }
         });
         scene.setFill(Color.TRANSPARENT);
-        control.setScene(new Scene(rootGroup, 200, 150));
+        control.setScene(new Scene(rootGroup, 280, 150));
         control.show();
         control.setX(scene.getX() / 2);
         control.setY(scene.getY());
@@ -233,4 +240,14 @@ public class ScreenShotCreator extends Application {
 
     }
 
+    public static String getLocalIP() {
+        String hostname = "";
+        try {
+            InetAddress addr = InetAddress.getLocalHost();
+            hostname = addr.getHostAddress();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return hostname;
+    }
 }
