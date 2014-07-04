@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Shared presentation" default="compile" basedir=".">
+    <property name="src" value="src"/>
+    <property name="bin" value="classes"/>
+    <property name="lib" value="lib"/>
+    <property name="GUI.jar.name" value="jars/GUI.jar"/>
+    <property name="manifest.main.class"  value="com.sharedpresentation.ScreenShotCreator"/>
+
+    <path id="main_cp">
+        <pathelement location="${bin}"/>
+    </path>
+
+    <path id="classpath">
+        <fileset dir="${lib}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="${bin}"/>
+        <javac srcdir="${src}" destdir="${bin}" classpathref="classpath" includeantruntime="true"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${bin}"/>
+        <delete file="${GUI.jar.name}"/>
+    </target>
+
+    <manifest file="MANIFEST.MF">
+        <attribute name="Main-Class" value="$com.sharedpresentation.ScreenShotCreator"/>
+    </manifest>
+
+    <jar jarfile="SPGUI" manifest="MANIFEST.MF">
+        <fileset dir="${bin}">
+            <include name="**/ScreenShotCreator.class"/>
+            <include name="**/RunInCmd.class"/>
+        </fileset>
+    </jar>
+
+</project>

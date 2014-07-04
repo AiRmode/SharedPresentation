@@ -36,10 +36,12 @@ public class ScreenShotCreator extends Application {
     protected boolean secondCoordinats = false;
     private int height = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     private int width = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-    private boolean isTimerStopped = true;
-    private boolean isDoCapture = true;
+    private volatile boolean isTimerStopped = true;
+    private volatile boolean isDoCapture = true;
     private final long capturingDelay = 500;
     private final long idleCheckDelay = 500;
+    private final String runTomCatCmd = "/server/bin/startup.bat";
+    private final String stopTomCatCmd = "/server/bin/shutdown.bat";
     private final String presentationStageTitle = "Shared Presentation";
     private final String controlStageTitle = "Control Presentation";
     private String fullServerLink = "http://" + getLocalIP() + ":8080" + "\n\n";
@@ -98,10 +100,12 @@ public class ScreenShotCreator extends Application {
         EventHandler<ActionEvent> startGettingPictureEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
+                //enable do capture
                 isDoCapture = true;
                 // start timer
                 if (isTimerStopped) {
                     isTimerStopped = false;
+                    new RunInCmd().runInCmd(runTomCatCmd);
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -184,6 +188,7 @@ public class ScreenShotCreator extends Application {
         control.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
+                new RunInCmd().runInCmd(stopTomCatCmd);
                 System.exit(0);
             }
         });
