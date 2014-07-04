@@ -1,6 +1,7 @@
 package com.sharedpresentation;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 
 /**
@@ -11,11 +12,36 @@ public class RunInCmd {
         Runtime rt = Runtime.getRuntime();
         Process p;
         try {
+            System.out.println("try: "+cmd);
             p = rt.exec(cmd);
-            System.out.println(cmd);
+            System.out.println("done: "+cmd);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
             if(true){
+                p.waitFor();
+            }
+            String inputData;
+            if(br.ready()) {
+                while ((inputData = br.readLine()) != null) {
+                    System.out.println(inputData);
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void runBatFileInCmd(String name, String path) {
+        Runtime rt = Runtime.getRuntime();
+        Process p;
+        try {
+            System.out.println("try: "+path+name);
+            p =  rt.exec("cmd /c "+name, null, new File(path));
+            System.out.println("done: "+path+name);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
+            if(false){
                 p.waitFor();
             }
             String inputData;

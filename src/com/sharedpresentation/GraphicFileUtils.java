@@ -10,12 +10,13 @@ import java.io.IOException;
  */
 public class GraphicFileUtils {
     private final String pictureFileName = "image.jpg";
-    private final String pictureFilePath = "../res/";
+    private final String pictureFilePath = "../../res/";
     private final String imagePrefix = "data:image/jpg;base64,";
 
     public String getGraphicFileBase64Representation() {
         String result;
         File graphicFile = new File(pictureFilePath + pictureFileName);
+        System.out.println("ser_path "+graphicFile.getAbsolutePath());
         byte[] imageFileBytes = getBinaryArrayFromFile(graphicFile);
         result = imagePrefix + new String(imageFileBytes);
         return result;

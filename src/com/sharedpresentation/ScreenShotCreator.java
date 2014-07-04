@@ -41,12 +41,13 @@ public class ScreenShotCreator extends Application {
     private volatile boolean isDoCapture = true;
     private final long capturingDelay = 500;
     private final long idleCheckDelay = 500;
-    private final String runTomCatCmd = RunInCmd.getPath()+"server/bin/startup.bat";
-//    private final String runTomCatCmd = "runServer.bat";
-    private final String stopTomCatCmd = RunInCmd.getPath()+"server/bin/shutdown.bat";
+    private final String runTomCatCmdPath = RunInCmd.getPath()+"server/bin";
+    private final String runTomCatCmdName = "startup.bat";
+    private final String stopTomCatCmd = RunInCmd.getPath()+"server/bin";
+    private final String stopTomCatCmdName = "shutdown.bat";
     private final String presentationStageTitle = "Shared Presentation";
     private final String controlStageTitle = "Control Presentation";
-    private String fullServerLink = "http://" + getLocalIP() + ":8080" + "\n\n";
+    private String fullServerLink = "http://" + getLocalIP() + ":8080" + "/sp\n\n";
 
     public static void main(String[] args) {
         //TODO: make file transfer via socket
@@ -83,7 +84,7 @@ public class ScreenShotCreator extends Application {
         EventHandler<ActionEvent> setExitEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
-                new RunInCmd().runInCmd(stopTomCatCmd);
+                new RunInCmd().runBatFileInCmd(stopTomCatCmdName,stopTomCatCmd);
                 System.exit(0);
             }
 
@@ -111,7 +112,7 @@ public class ScreenShotCreator extends Application {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new RunInCmd().runInCmd(runTomCatCmd);
+                            new RunInCmd().runBatFileInCmd(runTomCatCmdName,runTomCatCmdPath);
                             while (true) {
                                 while (isDoCapture) {
                                     getScreen(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
@@ -191,7 +192,7 @@ public class ScreenShotCreator extends Application {
         control.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                new RunInCmd().runInCmd(stopTomCatCmd);
+                new RunInCmd().runBatFileInCmd(stopTomCatCmdName,stopTomCatCmd);
                 System.exit(0);
             }
         });
