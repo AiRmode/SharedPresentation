@@ -49,7 +49,7 @@ function drawImageBinary(imgString) {
 
     image.onload = function () {
         // resizes image to a target size of 500x500 using letterbox mode
-        var result = scaleImage(image.width, image.height, 500, 500, true);
+        var result = scaleImage(image.width, image.height, canvas.width, canvas.height, true);
         ctx.drawImage(image, result.targetleft, result.targettop, result.width, result.height);
     };
 
@@ -57,6 +57,31 @@ function drawImageBinary(imgString) {
 
 function showOriginaImage() {
     console.log("You have clicked on image");
+    var cnv = document.getElementById('myCanvas');
+
+    if (!cnv || !cnv.getContext) {
+        return;
+    }
+
+    if (cnv && cnv.getContext) {
+        var scr = cnv.getContext('2d');
+        if (!scr) {
+            return;
+        }
+    }
+
+    var img = new Image();
+    img.src = savedImage;
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    scr.fillStyle = '#00';
+    scr.fillRect(0, 0, cnv.width, cnv.height);
+
+    img.onload = function() {
+        scr.drawImage(img, 0, 0, cnv.width, cnv.height);
+    }
 
     console.log("finish You have clicked on image");
 }
@@ -80,6 +105,10 @@ function postBinaryToServer() {
     }
 
     sendBinary(buffer);
+}
+
+function getFullPicture(){
+
 }
 
 function sendBinary(bytes) {

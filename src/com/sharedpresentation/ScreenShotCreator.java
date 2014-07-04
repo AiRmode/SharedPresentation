@@ -41,6 +41,8 @@ public class ScreenShotCreator extends Application {
     private static double xOffset = 0;
     private static double yOffset = 0;
     private static int imgCounter = 0;
+    private final String presentationStageTitle= "Shared Presentation";
+    private final String controlStageTitle="Control Presentation";
 
     public static void main(String[] args) {
         //TODO: make file transfer via socket
@@ -50,7 +52,8 @@ public class ScreenShotCreator extends Application {
     @Override
     public void start(final Stage stage) throws Exception {
         final Stage control = new Stage();
-
+        control.setTitle(controlStageTitle);
+        stage.setTitle(presentationStageTitle);
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setOpacity(0.1f);
 
@@ -111,8 +114,10 @@ public class ScreenShotCreator extends Application {
         };
         final Button stopGettingPicture = createButton("stop getting jpg...", stopGettingPictureEvent);
 
+
         VBox vBox = createVBox();
-        vBox.getChildren().addAll(setCoordinat, startGettingPicture, stopGettingPicture, fullScreen, exit);
+        vBox.getChildren().addAll(startGettingPicture, stopGettingPicture, fullScreen, exit);
+
 
         javafx.scene.shape.Rectangle rect2 = RectangleBuilder.create()
                 .arcWidth(30).arcHeight(30).fill(Color.color(0, 1, 1, 0.01)).x(10).y(160)
@@ -156,6 +161,12 @@ public class ScreenShotCreator extends Application {
         control.show();
         control.setX(scene.getX() / 2);
         control.setY(scene.getY());
+        control.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent windowEvent) {
+                System.exit(0);
+            }
+        });
 
         ResizeListener listener = new ResizeListener(stage, scene);
         scene.setOnMouseMoved(listener);
