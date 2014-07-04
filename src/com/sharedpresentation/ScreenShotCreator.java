@@ -185,7 +185,7 @@ public class ScreenShotCreator extends Application {
             }
         });
         scene.setFill(Color.TRANSPARENT);
-        control.setScene(new Scene(rootGroup, 280, 150));
+        control.setScene(new Scene(rootGroup, 300, 150));
         control.show();
         control.setX(scene.getX() / 2);
         control.setY(scene.getY());

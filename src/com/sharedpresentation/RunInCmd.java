@@ -12,16 +12,16 @@ public class RunInCmd {
         Runtime rt = Runtime.getRuntime();
         Process p;
         try {
-            System.out.println("try: "+cmd);
+            System.out.println("try: " + cmd);
             p = rt.exec(cmd);
-            System.out.println("done: "+cmd);
+            System.out.println("done: " + cmd);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
-            if(true){
+            if (true) {
                 p.waitFor();
             }
             String inputData;
-            if(br.ready()) {
+            if (br.ready()) {
                 while ((inputData = br.readLine()) != null) {
                     System.out.println(inputData);
                 }
@@ -36,16 +36,16 @@ public class RunInCmd {
         Runtime rt = Runtime.getRuntime();
         Process p;
         try {
-            System.out.println("try: "+path+name);
-            p =  rt.exec("cmd /c "+name, null, new File(path));
-            System.out.println("done: "+path+name);
+            System.out.println("try: " + path + " " + name);
+            p = rt.exec("cmd /c " + name, null, new File(path));
+            System.out.println("done: " + path + " " + name);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
-            if(false){
+            if (false) {
                 p.waitFor();
             }
             String inputData;
-            if(br.ready()) {
+            if (br.ready()) {
                 while ((inputData = br.readLine()) != null) {
                     System.out.println(inputData);
                 }
