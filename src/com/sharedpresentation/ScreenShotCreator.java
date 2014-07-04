@@ -20,8 +20,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by Admin on 16.06.14.
@@ -36,11 +34,10 @@ public class ScreenShotCreator extends Application {
     protected boolean secondCoordinats = false;
     private int height = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     private int width = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
-    private Timer timer2 = null;
-    private TimerTask task = null;
-    private static double xOffset = 0;
-    private static double yOffset = 0;
-    private static int imgCounter = 0;
+    private boolean isTimerStopped = true;
+    private boolean isDoCapture = true;
+    private final long capturingDelay=500;
+    private final long idleCheckDelay=500;
     private final String presentationStageTitle = "Shared Presentation";
     private final String controlStageTitle = "Control Presentation";
 
@@ -98,24 +95,34 @@ public class ScreenShotCreator extends Application {
         EventHandler<ActionEvent> startGettingPictureEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
+                isDoCapture = true;
                 // start timer
-                timer2 = new java.util.Timer();
-                task = new TimerTask() {
-                    public void run() {
-                        getScreen(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
-                    }
-                };
-                timer2.schedule(task, 0, 500);
+                if (isTimerStopped) {
+                    isTimerStopped = false;
+                    Thread t = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (true) {
+                                while (isDoCapture) {
+                                    getScreen(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
+                                    sleep(Thread.currentThread(),capturingDelay);
+                                }
+                                sleep(Thread.currentThread(),idleCheckDelay);
+                            }
+                        }
+                    });
+                    t.setDaemon(true);
+                    t.start();
+                }
             }
         };
+
         final Button startGettingPicture = createButton("start getting jpg...", startGettingPictureEvent);
 
         EventHandler<ActionEvent> stopGettingPictureEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
-                //stop timer
-                if (timer2 != null)
-                    timer2.cancel();
+                isDoCapture = false;
             }
         };
         final Button stopGettingPicture = createButton("stop getting jpg...", stopGettingPictureEvent);
@@ -189,6 +196,16 @@ public class ScreenShotCreator extends Application {
         stage.show();
     }
 
+    public boolean sleep(Thread t, long time) {
+        try {
+            t.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public VBox createVBox() {
         return new VBox();
     }
@@ -212,8 +229,6 @@ public class ScreenShotCreator extends Application {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            imgCounter++;
         }
 
     }
