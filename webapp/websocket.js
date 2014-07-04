@@ -31,7 +31,7 @@ function onMessage(message) {
             savedImage = message.data;
             drawImageBinary(message.data);
         } else {
-            document.getElementById("chatlog").textContent += message.data + "\n" + "!-----------------------!" + "\n";
+            document.getElementById("chatlog").textContent += message.data + "\n";
         }
     } else {
         console.log("received graphic size: " + message.data.size);

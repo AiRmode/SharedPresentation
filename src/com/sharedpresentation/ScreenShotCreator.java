@@ -41,8 +41,8 @@ public class ScreenShotCreator extends Application {
     private static double xOffset = 0;
     private static double yOffset = 0;
     private static int imgCounter = 0;
-    private final String presentationStageTitle= "Shared Presentation";
-    private final String controlStageTitle="Control Presentation";
+    private final String presentationStageTitle = "Shared Presentation";
+    private final String controlStageTitle = "Control Presentation";
 
     public static void main(String[] args) {
         //TODO: make file transfer via socket
@@ -62,9 +62,15 @@ public class ScreenShotCreator extends Application {
         EventHandler<ActionEvent> setFullScreen = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
-                stage.setFullScreen(true);
-                stage.toBack();
-                control.toFront();
+                if (stage.isFullScreen()) {
+                    stage.setFullScreen(false);
+                    stage.toFront();
+                    control.toFront();
+                } else {
+                    stage.setFullScreen(true);
+                    stage.toBack();
+                    control.toFront();
+                }
             }
 
         };
