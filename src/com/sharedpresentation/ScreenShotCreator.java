@@ -206,6 +206,7 @@ public class ScreenShotCreator extends Application {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
+                new RunInCmd().runBatFileInCmd(stopTomCatCmdName,stopTomCatCmd);
                 System.exit(0);
             }
         });
