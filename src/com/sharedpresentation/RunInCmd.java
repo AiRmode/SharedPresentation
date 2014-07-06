@@ -32,28 +32,34 @@ public class RunInCmd {
         }
     }
 
-    public void runBatFileInCmd(String name, String path) {
-        Runtime rt = Runtime.getRuntime();
-        Process p;
-        try {
-            System.out.println("try: " + path + " " + name);
-            p = rt.exec("cmd /c " + name, null, new File(path));
-            System.out.println("done: " + path + " " + name);
+    public synchronized void runBatFileInCmd(final String name, final String path) {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Runtime rt = Runtime.getRuntime();
+                Process p;
+                try {
+                    System.out.println("try: " + path + " " + name);
+                    p = rt.exec("cmd /c " + name, null, new File(path));
+                    System.out.println("done: " + path + " " + name);
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
-            if (false) {
-                p.waitFor();
-            }
-            String inputData;
-            if (br.ready()) {
-                while ((inputData = br.readLine()) != null) {
-                    System.out.println(inputData);
+                    BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
+                    if (true) {
+                        p.waitFor();
+                    }
+                    String inputData;
+                    if (br.ready()) {
+                        while ((inputData = br.readLine()) != null) {
+                            System.out.println(inputData);
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        });
+        t.start();
     }
 
     public static String getPath() {
