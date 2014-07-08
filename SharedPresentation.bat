@@ -1,1 +1,1 @@
-java -jar GUI.jar
+jdk\bin\java.exe -jar GUI.jar
