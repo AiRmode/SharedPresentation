@@ -79,7 +79,7 @@ public class ScreenShotCreator extends Application {
             }
 
         };
-        final Button fullScreen = createButton("Full screen", setFullScreen);
+        final Button fullScreen = createButton("Full screen/Window screen", setFullScreen);
 
         EventHandler<ActionEvent> setExitEvent = new EventHandler<ActionEvent>() {
             @Override
@@ -128,7 +128,7 @@ public class ScreenShotCreator extends Application {
             }
         };
 
-        final Button startGettingPicture = createButton("start getting jpg...", startGettingPictureEvent);
+        final Button startGettingPicture = createButton("Start presentation", startGettingPictureEvent);
 
         EventHandler<ActionEvent> stopGettingPictureEvent = new EventHandler<ActionEvent>() {
             @Override
@@ -136,7 +136,7 @@ public class ScreenShotCreator extends Application {
                 isDoCapture = false;
             }
         };
-        final Button stopGettingPicture = createButton("stop getting jpg...", stopGettingPictureEvent);
+        final Button stopGettingPicture = createButton("Stop presentation", stopGettingPictureEvent);
 
 
         TextField ipAdress = new TextField();
