@@ -4,6 +4,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 /**
@@ -21,6 +23,7 @@ public class ResizeListener implements EventHandler<MouseEvent> {
     private boolean resizeV = false;
     private Scene scene;
     private Stage stage;
+    private Rectangle captureSceneRect;
 
     double minSizeWidth = 100;
     double minSizeHeight = 100;
@@ -28,9 +31,10 @@ public class ResizeListener implements EventHandler<MouseEvent> {
     private static double xOffset = 0;
     private static double yOffset = 0;
 
-    public ResizeListener(Stage stage, Scene scene) {
+    public ResizeListener(Stage stage, Scene scene,Rectangle captureSceneRect) {
         this.stage = stage;
         this.scene = scene;
+        this.captureSceneRect = captureSceneRect;
     }
 
     @Override
@@ -140,6 +144,24 @@ public class ResizeListener implements EventHandler<MouseEvent> {
                 stage.setY(t.getScreenY() + yOffset);
             }
         }
+
+
+        updateSceneProperties();
+    }
+
+    private void updateSceneProperties() {
+        captureSceneRect.setWidth(stage.getWidth()-4);
+        captureSceneRect.setHeight(stage.getHeight()-4);
+        captureSceneRect.setX(stage.getX());
+        captureSceneRect.setY(stage.getY());
+        captureSceneRect.setStroke(Color.RED);
+        captureSceneRect.setStrokeDashOffset(10);
+        captureSceneRect.setStrokeWidth(4);
+        captureSceneRect.setArcWidth(20);
+        captureSceneRect.setArcHeight(20);
+//        Shadow s = new Shadow();
+//        s.setColor(Color.GRAY);
+//        captureSceneRect.setEffect(s);
     }
 
     public static double getBorder() {

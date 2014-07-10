@@ -60,9 +60,11 @@ public class ScreenShotCreator extends Application {
         control.setTitle(controlStageTitle);
         stage.setTitle(presentationStageTitle);
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.setOpacity(0.3f);
+        stage.setOpacity(0.2f);
 
-        Group rootGroup = new Group();
+        Group controlRootGroup = new Group();
+
+        Group presentationRootGroup = new Group();
 
         EventHandler<ActionEvent> setFullScreen = new EventHandler<ActionEvent>() {
             @Override
@@ -156,13 +158,28 @@ public class ScreenShotCreator extends Application {
         VBox v = new VBox();
         v.getChildren().add(rect2);
 
-        GridPane t = new GridPane();
-        t.add(vBox, 1, 1);
-        t.add(v, 1, 2);
+        GridPane gridPane = new GridPane();
+        gridPane.add(vBox, 1, 1);
+        gridPane.add(v, 1, 2);
 
-        rootGroup.getChildren().add(t);
 
-        Scene scene = new Scene(new Group(), 800, 600);
+
+        javafx.scene.shape.Rectangle captureSceneRect = new javafx.scene.shape.Rectangle();
+        captureSceneRect.setId("captureSceneRect");
+
+        VBox pVBox = new VBox();
+        pVBox.getChildren().add(captureSceneRect);
+
+        GridPane pPane = new GridPane();
+        pPane.add(pVBox, 1, 1);
+
+        presentationRootGroup.getChildren().add(pPane);
+
+
+
+        controlRootGroup.getChildren().add(gridPane);
+
+        Scene scene = new Scene(presentationRootGroup, 800, 600);
         scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent m) {
@@ -184,8 +201,10 @@ public class ScreenShotCreator extends Application {
                 }
             }
         });
-        scene.setFill(Color.TRANSPARENT);
-        control.setScene(new Scene(rootGroup, 300, 150));
+
+//        scene.setFill(Color.TRANSPARENT);
+
+        control.setScene(new Scene(controlRootGroup, 300, 150));
         control.show();
         control.setX(scene.getX() / 2);
         control.setY(scene.getY());
@@ -197,7 +216,7 @@ public class ScreenShotCreator extends Application {
             }
         });
 
-        ResizeListener listener = new ResizeListener(stage, scene);
+        ResizeListener listener = new ResizeListener(stage, scene,captureSceneRect);
         scene.setOnMouseMoved(listener);
         scene.setOnMousePressed(listener);
         scene.setOnMouseDragged(listener);
