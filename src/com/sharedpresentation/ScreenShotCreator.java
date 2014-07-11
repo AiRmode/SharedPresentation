@@ -30,7 +30,7 @@ public class ScreenShotCreator extends Application {
     //    private static String path_to_image = "D:\\Java\\wildfly-8.1.0.Final\\wildfly-8.1.0.Final\\res\\";
 //    private static String path_to_image = "D:\\Java\\TomCats\\apache-tomcat-8.0.8\\res\\";
 //    private static String path_to_image = "D:\\java-data\\apache-tomcat-8.0.8\\apache-tomcat-8.0.8\\res\\";
-    private static String path_to_image = "server/res/";
+    private static String path_to_image = "server/res";
     private int start_X = -1, final_X = -1;
     private int start_Y = -1, final_Y = -1;
     protected boolean firstCoordinats = true;
@@ -41,9 +41,9 @@ public class ScreenShotCreator extends Application {
     private volatile boolean isDoCapture = true;
     private final long capturingDelay = 500;
     private final long idleCheckDelay = 500;
-    private final String runTomCatCmdPath = RunInCmd.getPath()+"server/bin";
+    private final String runTomCatCmdPath = RunInCmd.getPath() + "server/bin";
     private final String runTomCatCmdName = "startup.bat";
-    private final String stopTomCatCmd = RunInCmd.getPath()+"server/bin";
+    private final String stopTomCatCmd = RunInCmd.getPath() + "server/bin";
     private final String stopTomCatCmdName = "shutdown.bat";
     private final String presentationStageTitle = "Shared Presentation";
     private final String controlStageTitle = "Control Presentation";
@@ -86,7 +86,7 @@ public class ScreenShotCreator extends Application {
         EventHandler<ActionEvent> setExitEvent = new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent arg0) {
-                new RunInCmd().runBatFileInCmd(stopTomCatCmdName,stopTomCatCmd);
+                new RunInCmd().runBatFileInCmd(stopTomCatCmdName, stopTomCatCmd);
                 System.exit(0);
             }
 
@@ -114,7 +114,7 @@ public class ScreenShotCreator extends Application {
                     Thread t = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            new RunInCmd().runBatFileInCmd(runTomCatCmdName,runTomCatCmdPath);
+                            new RunInCmd().runBatFileInCmd(runTomCatCmdName, runTomCatCmdPath);
                             while (true) {
                                 while (isDoCapture) {
                                     getScreen(stage.getX(), stage.getY(), stage.getWidth(), stage.getHeight());
@@ -163,7 +163,6 @@ public class ScreenShotCreator extends Application {
         gridPane.add(v, 1, 2);
 
 
-
         javafx.scene.shape.Rectangle captureSceneRect = new javafx.scene.shape.Rectangle();
         captureSceneRect.setId("captureSceneRect");
 
@@ -174,7 +173,6 @@ public class ScreenShotCreator extends Application {
         pPane.add(pVBox, 1, 1);
 
         presentationRootGroup.getChildren().add(pPane);
-
 
 
         controlRootGroup.getChildren().add(gridPane);
@@ -211,12 +209,12 @@ public class ScreenShotCreator extends Application {
         control.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                new RunInCmd().runBatFileInCmd(stopTomCatCmdName,stopTomCatCmd);
+                new RunInCmd().runBatFileInCmd(stopTomCatCmdName, stopTomCatCmd);
                 System.exit(0);
             }
         });
 
-        ResizeListener listener = new ResizeListener(stage, scene,captureSceneRect);
+        ResizeListener listener = new ResizeListener(stage, scene, captureSceneRect);
         scene.setOnMouseMoved(listener);
         scene.setOnMousePressed(listener);
         scene.setOnMouseDragged(listener);
@@ -225,7 +223,7 @@ public class ScreenShotCreator extends Application {
         stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent windowEvent) {
-                new RunInCmd().runBatFileInCmd(stopTomCatCmdName,stopTomCatCmd);
+                new RunInCmd().runBatFileInCmd(stopTomCatCmdName, stopTomCatCmd);
                 System.exit(0);
             }
         });
@@ -257,7 +255,10 @@ public class ScreenShotCreator extends Application {
         screenRect.setBounds((int) xs, (int) ys, ((int) (xf)), ((int) (yf)));
         try {
             BufferedImage bufferedImage = new Robot().createScreenCapture(screenRect);
-            ImageIO.write(bufferedImage, "jpg", new File(path_to_image + "image" + ".jpg"));
+            createImageFolderIfNotExist();
+            File capturedImage = new File(path_to_image + "/" + "temp_image" + ".jpg");
+            ImageIO.write(bufferedImage, "jpg", capturedImage);
+            createCorrectImgFileIfNeeded(capturedImage);
             Thread.sleep(500);
         } catch (AWTException e) {
             e.printStackTrace();
@@ -267,6 +268,34 @@ public class ScreenShotCreator extends Application {
             e.printStackTrace();
         }
 
+    }
+
+    private static void createCorrectImgFileIfNeeded(File capturedImage) {
+        File prevImage = new File(path_to_image + "/" + "image" + ".jpg");
+        if (prevImage == null || capturedImage == null) {
+            return;
+        }
+        if (!prevImage.exists()) {
+            capturedImage.renameTo(prevImage);
+        } else if (prevImage.equals(capturedImage)) {
+            return;
+        } else {
+            boolean isDeleted = prevImage.delete();
+            if (isDeleted) {
+                capturedImage.renameTo(prevImage);
+            }
+        }
+    }
+
+    private static void createImageFolderIfNotExist() {
+        try {
+            File imgFolder = new File(path_to_image);
+            if (!imgFolder.exists()) {
+                imgFolder.createNewFile();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static String getLocalIP() {
