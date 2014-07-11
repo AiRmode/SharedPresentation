@@ -1,5 +1,7 @@
 package com.sharedpresentation;
 
+import org.apache.log4j.Logger;
+
 import javax.websocket.Session;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import java.util.Map;
 public class TimerTextMsgSender implements Runnable {
     private final int REFRESH_TIME_DELAY = 200;
     private final ThreadUtils threadUtils = new ThreadUtils();
+    private static Logger logger = Logger.getLogger(TimerTextMsgSender.class);
 
     public TimerTextMsgSender() {
 
@@ -40,10 +43,10 @@ public class TimerTextMsgSender implements Runnable {
                 }
                 threadUtils.threadSleep(REFRESH_TIME_DELAY);
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         }
-        System.out.println(getClass().getSimpleName() + " exit....");
+        logger.info(getClass().getSimpleName() + " exit....");
     }
 
 }

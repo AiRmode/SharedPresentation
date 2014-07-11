@@ -1,5 +1,7 @@
 package com.sharedpresentation;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
@@ -8,13 +10,15 @@ import java.io.InputStreamReader;
  * Created by alshevchuk on 04.07.2014.
  */
 public class RunInCmd {
+    private static Logger logger = Logger.getLogger(RunInCmd.class);
+
     public void runInCmd(String cmd) {
         Runtime rt = Runtime.getRuntime();
         Process p;
         try {
-            System.out.println("try: " + cmd);
+            logger.info("try: " + cmd);
             p = rt.exec(cmd);
-            System.out.println("done: " + cmd);
+            logger.info("done: " + cmd);
 
             BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
             if (true) {
@@ -23,12 +27,12 @@ public class RunInCmd {
             String inputData;
             if (br.ready()) {
                 while ((inputData = br.readLine()) != null) {
-                    System.out.println(inputData);
+                    logger.info(inputData);
                 }
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -39,9 +43,9 @@ public class RunInCmd {
                 Runtime rt = Runtime.getRuntime();
                 Process p;
                 try {
-                    System.out.println("try: " + path + " " + name);
+                    logger.info("try: " + path + " " + name);
                     p = rt.exec("cmd /c " + name, null, new File(path));
-                    System.out.println("done: " + path + " " + name);
+                    logger.info("done: " + path + " " + name);
 
                     BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream(), "Cp866"));
                     if (true) {
@@ -50,12 +54,12 @@ public class RunInCmd {
                     String inputData;
                     if (br.ready()) {
                         while ((inputData = br.readLine()) != null) {
-                            System.out.println(inputData);
+                            logger.info(inputData);
                         }
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
             }
         });

@@ -1,5 +1,7 @@
 package com.sharedpresentation;
 
+import org.apache.log4j.Logger;
+
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.nio.ByteBuffer;
@@ -22,6 +24,7 @@ public class MySharedPresentation {
     private volatile static TimerTextMsgSender timerTextMsgSender = new TimerTextMsgSender();
     private volatile static Thread graphicMsgTimerThread = new Thread(timerGraphicMsgSender);
     private volatile static Thread textMsgTimerThread = new Thread(timerTextMsgSender);
+    private static final Logger logger = Logger.getLogger(MySharedPresentation.class);
 
     private volatile boolean allBinaryDataSend = false;
     private volatile boolean allTextDataSend = false;
@@ -39,39 +42,39 @@ public class MySharedPresentation {
         if (!graphicMsgTimerThread.isAlive()) {
             graphicMsgTimerThread.start();
         } else
-            System.out.println("Timer (graphic msg) has already been started");
+            logger.info("Timer (graphic msg) has already been started");
 
         if (!textMsgTimerThread.isAlive()) {
             textMsgTimerThread.start();
         } else
-            System.out.println("Timer (text msg) has already been started");
+            logger.info("Timer (text msg) has already been started");
     }
 
     public MySharedPresentation() {
-        System.out.println("Create new server endpoint class-" + classCounter++);
+        logger.info("Create new server endpoint class-" + classCounter++);
     }
 
     @OnOpen
     public void onOpen(Session peer) {
         //May be Integer.MAX_VALUE
         peer.setMaxBinaryMessageBufferSize(1000000);
-        System.out.println("New peer added");
+        logger.info("New peer added");
         peers.add(peer);
         clientsMap.put(peer, this);
-        System.out.println(peers.size() + " active peers");
+        logger.info(peers.size() + " active peers");
 
         sendCurrentPicture(peer);
     }
 
     @OnMessage
     public void onMessage(String message) {
-        System.out.println("string, " + message.length());
+        logger.info("string, " + message.length());
         textMessagesQueue.offer(message);
     }
 
     @OnMessage
     public void onMessage(ByteBuffer message) {
-        System.out.println("binary, " + message.array().length + " type=" + message);
+        logger.info("binary, " + message.array().length + " type=" + message);
     }
 
     @OnClose
@@ -84,9 +87,9 @@ public class MySharedPresentation {
                     clientsMap.remove(peer);
                 peer.close();
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
-            System.out.println("Peer closed. Only " + peers.size() + " connections still exist.");
+            logger.info("Peer closed. Only " + peers.size() + " connections still exist.");
         }
     }
 
@@ -97,7 +100,7 @@ public class MySharedPresentation {
                 sendResult = WSUtils.sendStringMessage(peer, graphicFileUtils.getGraphicFileBase64Representation());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 

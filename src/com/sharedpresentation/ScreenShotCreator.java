@@ -15,6 +15,7 @@ import javafx.scene.shape.RectangleBuilder;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -27,9 +28,7 @@ import java.net.InetAddress;
  * Created by Admin on 16.06.14.
  */
 public class ScreenShotCreator extends Application {
-    //    private static String path_to_image = "D:\\Java\\wildfly-8.1.0.Final\\wildfly-8.1.0.Final\\res\\";
-//    private static String path_to_image = "D:\\Java\\TomCats\\apache-tomcat-8.0.8\\res\\";
-//    private static String path_to_image = "D:\\java-data\\apache-tomcat-8.0.8\\apache-tomcat-8.0.8\\res\\";
+    private static Logger logger = Logger.getLogger(ScreenShotCreator.class);
     private static String path_to_image = "server/res";
     private int start_X = -1, final_X = -1;
     private int start_Y = -1, final_Y = -1;
@@ -184,7 +183,7 @@ public class ScreenShotCreator extends Application {
                 if (firstCoordinats) {
                     start_X = (int) m.getScreenX();
                     start_Y = (int) m.getScreenY();
-                    System.out.println("click1!" + start_X + " , " + start_Y);
+                    logger.info("click1!" + start_X + " , " + start_Y);
                     firstCoordinats = false;
                     secondCoordinats = true;
                     return;
@@ -193,7 +192,7 @@ public class ScreenShotCreator extends Application {
                 if (secondCoordinats) {
                     final_X = (int) m.getScreenX();
                     final_Y = (int) m.getScreenY();
-                    System.out.println("click2!" + final_X + " , " + final_Y);
+                    logger.info("click2!" + final_X + " , " + final_Y);
                     firstCoordinats = false;
                     secondCoordinats = false;
                 }
@@ -234,7 +233,7 @@ public class ScreenShotCreator extends Application {
         try {
             t.sleep(time);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             return false;
         }
         return true;
@@ -261,11 +260,11 @@ public class ScreenShotCreator extends Application {
             createCorrectImgFileIfNeeded(capturedImage);
             Thread.sleep(500);
         } catch (AWTException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
     }
@@ -294,7 +293,7 @@ public class ScreenShotCreator extends Application {
                 imgFolder.createNewFile();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
     }
 
@@ -304,7 +303,7 @@ public class ScreenShotCreator extends Application {
             InetAddress addr = InetAddress.getLocalHost();
             hostname = addr.getHostAddress();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return hostname;
     }

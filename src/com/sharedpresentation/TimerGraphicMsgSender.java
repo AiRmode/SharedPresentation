@@ -1,5 +1,7 @@
 package com.sharedpresentation;
 
+import org.apache.log4j.Logger;
+
 import javax.websocket.Session;
 import java.util.Map;
 
@@ -12,6 +14,7 @@ public class TimerGraphicMsgSender implements Runnable {
     private final ThreadUtils threadUtils = new ThreadUtils();
     private GraphicFileUtils graphicFileUtils = new GraphicFileUtils();
     private volatile String prevPicture = "";
+    private static Logger logger = Logger.getLogger(TimerGraphicMsgSender.class);
 
     public TimerGraphicMsgSender() {
 
@@ -42,7 +45,7 @@ public class TimerGraphicMsgSender implements Runnable {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                logger.info(e.getMessage());
             }
 
         }

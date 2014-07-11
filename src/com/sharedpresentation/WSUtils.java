@@ -1,5 +1,7 @@
 package com.sharedpresentation;
 
+import org.apache.log4j.Logger;
+
 import javax.websocket.Session;
 
 /**
@@ -8,6 +10,7 @@ import javax.websocket.Session;
 public class WSUtils {
     private static volatile boolean isSendingInProgress = false;
     private static volatile Object lock = new Object();
+    private static Logger logger = Logger.getLogger(WSUtils.class);
 
     public static boolean sendStringMessage(Session session, String message) {
         boolean result = false;
@@ -21,7 +24,7 @@ public class WSUtils {
             }
         } catch (Exception e) {
             isSendingInProgress = false;
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return result;
     }

@@ -3,6 +3,7 @@
     <property name="src" value="src"/>
     <property name="bin" value="classes"/>
     <property name="lib" value="lib"/>
+    <property name="ext" value="ext"/>
     <property name="GUI.jar.name" value="jars/GUI.jar"/>
     <property name="GUI.jar.name.work" value="GUI.jar"/>
     <property name="manifest.main.class"  value="com.sharedpresentation.ScreenShotCreator"/>
@@ -28,7 +29,6 @@
     </target>
 
     <target name="make.gui.jar" depends="compile">
-
         <pathconvert property="mf.classpath" pathsep=" ">
             <mapper>
                 <chainedmapper>
@@ -48,8 +48,11 @@
             <fileset dir="${bin}">
                 <include name="**/*.class"/>
             </fileset>
+            <fileset dir="${src}">
+                <include name="**/*.xml"/>
+            </fileset>
             <zipgroupfileset dir="${lib}">
-                <include name="jfxrt.jar"/>
+                <include name="**/*.jar"/>
             </zipgroupfileset>
         </jar>
 
@@ -57,13 +60,15 @@
             <fileset dir="${bin}">
                 <include name="**/*.class"/>
             </fileset>
+            <fileset dir="${ext}">
+                <include name="**/*.xml"/>
+            </fileset>
             <zipgroupfileset dir="${lib}">
-                <include name="jfxrt.jar"/>
+                <include name="**/*.jar"/>
             </zipgroupfileset>
         </jar>
 
         <delete file="MANIFEST.MF"/>
-
     </target>
 
 </project>
