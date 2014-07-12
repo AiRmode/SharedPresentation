@@ -228,6 +228,16 @@ public class ScreenShotCreator extends Application {
             }
         });
         stage.show();
+
+        captureSceneRect.setWidth(stage.getWidth()-4);
+        captureSceneRect.setHeight(stage.getHeight()-4);
+        captureSceneRect.setX(stage.getX());
+        captureSceneRect.setY(stage.getY());
+        captureSceneRect.setStroke(Color.RED);
+        captureSceneRect.setStrokeDashOffset(10);
+        captureSceneRect.setStrokeWidth(4);
+        captureSceneRect.setArcWidth(20);
+        captureSceneRect.setArcHeight(20);
     }
 
     public boolean sleep(Thread t, long time) {
