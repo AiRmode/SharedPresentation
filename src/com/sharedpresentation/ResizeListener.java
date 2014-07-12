@@ -159,9 +159,6 @@ public class ResizeListener implements EventHandler<MouseEvent> {
         captureSceneRect.setStrokeWidth(4);
         captureSceneRect.setArcWidth(20);
         captureSceneRect.setArcHeight(20);
-//        Shadow s = new Shadow();
-//        s.setColor(Color.GRAY);
-//        captureSceneRect.setEffect(s);
     }
 
     public static double getBorder() {

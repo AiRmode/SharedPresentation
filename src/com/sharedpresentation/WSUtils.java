@@ -1,5 +1,6 @@
 package com.sharedpresentation;
 
+import com.sharedpresentation.commons.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import javax.websocket.Session;
@@ -24,7 +25,7 @@ public class WSUtils {
             }
         } catch (Exception e) {
             isSendingInProgress = false;
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
         return result;
     }

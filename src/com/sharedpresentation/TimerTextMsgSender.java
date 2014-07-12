@@ -1,9 +1,9 @@
 package com.sharedpresentation;
 
+import com.sharedpresentation.commons.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import javax.websocket.Session;
-import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -44,7 +44,7 @@ public class TimerTextMsgSender implements Runnable {
                 }
                 threadUtils.threadSleep(REFRESH_TIME_DELAY);
             } catch (Exception e) {
-                logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+                logger.error(ExceptionUtils.createExceptionMessage(e));
             }
         }
         logger.info(getClass().getSimpleName() + " exit....");

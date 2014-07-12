@@ -1,9 +1,8 @@
 package com.sharedpresentation;
 
 
+import com.sharedpresentation.commons.ExceptionUtils;
 import org.apache.log4j.Logger;
-
-import java.util.Arrays;
 
 /**
  * Created by Admin on 14.06.14.
@@ -17,7 +16,7 @@ public class ThreadUtils {
         try {
             Thread.sleep(sleepingPeriod);
         } catch (InterruptedException e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
     }
 

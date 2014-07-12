@@ -1,5 +1,6 @@
 package com.sharedpresentation;
 
+import com.sharedpresentation.commons.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import javax.websocket.*;
@@ -87,7 +88,7 @@ public class MySharedPresentation {
                     clientsMap.remove(peer);
                 peer.close();
             } catch (Exception e) {
-                logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+                logger.error(ExceptionUtils.createExceptionMessage(e));
             }
             logger.info("Peer closed. Only " + peers.size() + " connections still exist.");
         }
@@ -100,7 +101,7 @@ public class MySharedPresentation {
                 sendResult = WSUtils.sendStringMessage(peer, graphicFileUtils.getGraphicFileBase64Representation());
             }
         } catch (Exception e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
     }
 

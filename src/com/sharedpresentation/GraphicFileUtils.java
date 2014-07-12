@@ -1,11 +1,11 @@
 package com.sharedpresentation;
 
+import com.sharedpresentation.commons.ExceptionUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * Created by Admin on 16.06.14.
@@ -32,7 +32,7 @@ public class GraphicFileUtils {
         try {
             imageFileBytes = Base64.encodeBase64(org.apache.commons.io.FileUtils.readFileToByteArray(file));
         } catch (IOException e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
         return imageFileBytes;
     }

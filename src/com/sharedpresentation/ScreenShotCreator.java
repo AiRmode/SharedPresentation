@@ -1,5 +1,6 @@
 package com.sharedpresentation;
 
+import com.sharedpresentation.commons.ExceptionUtils;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -23,7 +24,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.Arrays;
 
 /**
  * Created by Admin on 16.06.14.
@@ -234,7 +234,7 @@ public class ScreenShotCreator extends Application {
         try {
             t.sleep(time);
         } catch (InterruptedException e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
             return false;
         }
         return true;
@@ -261,11 +261,11 @@ public class ScreenShotCreator extends Application {
             createCorrectImgFileIfNeeded(capturedImage);
             Thread.sleep(500);
         } catch (AWTException e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         } catch (IOException e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         } catch (Exception e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
 
     }
@@ -294,7 +294,7 @@ public class ScreenShotCreator extends Application {
                 imgFolder.createNewFile();
             }
         } catch (Exception e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
     }
 
@@ -304,7 +304,7 @@ public class ScreenShotCreator extends Application {
             InetAddress addr = InetAddress.getLocalHost();
             hostname = addr.getHostAddress();
         } catch (Exception e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
         return hostname;
     }

@@ -1,11 +1,11 @@
 package com.sharedpresentation;
 
+import com.sharedpresentation.commons.ExceptionUtils;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 
 /**
  * Created by alshevchuk on 04.07.2014.
@@ -33,7 +33,7 @@ public class RunInCmd {
             }
 
         } catch (Exception e) {
-            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+            logger.error(ExceptionUtils.createExceptionMessage(e));
         }
     }
 
@@ -60,7 +60,7 @@ public class RunInCmd {
                     }
 
                 } catch (Exception e) {
-                    logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
+                    logger.error(ExceptionUtils.createExceptionMessage(e));
                 }
             }
         });
