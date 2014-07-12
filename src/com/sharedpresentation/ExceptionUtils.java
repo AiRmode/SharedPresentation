@@ -4,7 +4,7 @@ package com.sharedpresentation;
  * Created by Admin on 12.07.14.
  */
 public class ExceptionUtils {
-    public static String createExceptionMessage(StackTraceElement[] stackTraceElements) {
+    public synchronized static String createExceptionMessage(StackTraceElement[] stackTraceElements) {
         StringBuffer exceptionMessage = new StringBuffer("");
         if (stackTraceElements == null) {
             return "exception stackTraceElements == null";
