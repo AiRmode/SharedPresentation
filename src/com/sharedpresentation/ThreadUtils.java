@@ -3,6 +3,8 @@ package com.sharedpresentation;
 
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
+
 /**
  * Created by Admin on 14.06.14.
  */
@@ -15,7 +17,7 @@ public class ThreadUtils {
         try {
             Thread.sleep(sleepingPeriod);
         } catch (InterruptedException e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
         }
     }
 

@@ -87,7 +87,7 @@ public class MySharedPresentation {
                     clientsMap.remove(peer);
                 peer.close();
             } catch (Exception e) {
-                logger.error(e.getMessage());
+                logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
             }
             logger.info("Peer closed. Only " + peers.size() + " connections still exist.");
         }
@@ -100,7 +100,7 @@ public class MySharedPresentation {
                 sendResult = WSUtils.sendStringMessage(peer, graphicFileUtils.getGraphicFileBase64Representation());
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
         }
     }
 

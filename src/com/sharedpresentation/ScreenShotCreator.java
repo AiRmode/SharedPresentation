@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.Arrays;
 
 /**
  * Created by Admin on 16.06.14.
@@ -233,7 +234,7 @@ public class ScreenShotCreator extends Application {
         try {
             t.sleep(time);
         } catch (InterruptedException e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
             return false;
         }
         return true;
@@ -260,11 +261,11 @@ public class ScreenShotCreator extends Application {
             createCorrectImgFileIfNeeded(capturedImage);
             Thread.sleep(500);
         } catch (AWTException e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
         }
 
     }
@@ -293,7 +294,7 @@ public class ScreenShotCreator extends Application {
                 imgFolder.createNewFile();
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
         }
     }
 
@@ -303,7 +304,7 @@ public class ScreenShotCreator extends Application {
             InetAddress addr = InetAddress.getLocalHost();
             hostname = addr.getHostAddress();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
         }
         return hostname;
     }

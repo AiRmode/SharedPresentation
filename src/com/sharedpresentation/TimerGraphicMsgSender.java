@@ -3,6 +3,7 @@ package com.sharedpresentation;
 import org.apache.log4j.Logger;
 
 import javax.websocket.Session;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -45,7 +46,7 @@ public class TimerGraphicMsgSender implements Runnable {
                     }
                 }
             } catch (Exception e) {
-                logger.info(e.getMessage());
+                logger.info(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
             }
 
         }

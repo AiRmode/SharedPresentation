@@ -3,6 +3,7 @@ package com.sharedpresentation;
 import org.apache.log4j.Logger;
 
 import javax.websocket.Session;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -43,7 +44,7 @@ public class TimerTextMsgSender implements Runnable {
                 }
                 threadUtils.threadSleep(REFRESH_TIME_DELAY);
             } catch (Exception e) {
-                logger.error(e.getMessage());
+                logger.error(ExceptionUtils.createExceptionMessage(e.getStackTrace()));
             }
         }
         logger.info(getClass().getSimpleName() + " exit....");
