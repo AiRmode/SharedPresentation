@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration debug="false" xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- <appender name="devConsoleLog" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="Encoding" value="UTF-8" />
+		<param name="file" value="logs/db_cleanup.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="INFO" />
+			<param name="LevelMax" value="ERROR" />
+		</filter>
+	</appender>
+
+	<appender name="userConsoleLog" class="org.apache.log4j.ConsoleAppender">
+		<param name="Encoding" value="Cp866" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+      		<param name="LevelMin" value="INFO" />
+      		<param name="LevelMax" value="INFO" />
+    	</filter>
+	</appender> -->
+
+    <appender name="debugConsoleLog" class="org.apache.log4j.ConsoleAppender">
+        <param name="Encoding" value="Cp866"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="TRACE"/>
+            <param name="LevelMax" value="ERROR"/>
+        </filter>
+    </appender>
+
+    <appender name="debugFileLog" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="Encoding" value="UTF-8"/>
+        <param name="file" value="logs/SP.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{ISO8601} [%-5p] [%-7.7t]- %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="TRACE"/>
+            <param name="LevelMax" value="FATAL"/>
+        </filter>
+    </appender>
+
+    <!-- <logger name="com">
+		<level value="INFO" />
+		<appender-ref ref="userConsoleLog" />
+	</logger>
+	
+	<logger name="tests">
+		<level value="INFO" />
+		<appender-ref ref="userConsoleLog" />
+	</logger> -->
+
+    <root>
+        <priority value="DEBUG"/>
+        <appender-ref ref="debugConsoleLog"/>
+        <appender-ref ref="debugFileLog"/>
+    </root>
+
+</log4j:configuration>

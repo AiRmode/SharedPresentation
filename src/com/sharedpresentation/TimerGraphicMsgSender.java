@@ -15,6 +15,7 @@ public class TimerGraphicMsgSender implements Runnable {
     private final ThreadUtils threadUtils = new ThreadUtils();
     private GraphicFileUtils graphicFileUtils = new GraphicFileUtils();
     private volatile String prevPicture = "";
+    private volatile String newPicture = "";
     private static Logger logger = Logger.getLogger(TimerGraphicMsgSender.class);
 
     public TimerGraphicMsgSender() {
@@ -24,13 +25,28 @@ public class TimerGraphicMsgSender implements Runnable {
     @Override
     public void run() {
         boolean flag = ThreadUtils.isGraphicMsgTimerState();
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    try {
+                        newPicture = graphicFileUtils.getGraphicFileBase64Representation();
+                        threadUtils.threadSleep(REFRESH_TIME_DELAY);
+                    } catch (Exception e) {
+                        logger.error(ExceptionUtils.createExceptionMessage(e));
+                    }
+                }
+            }
+        });
+        t.setDaemon(true);
+        t.start();
+
         while (flag) {
             try {
                 threadUtils.threadSleep(REFRESH_TIME_DELAY);
                 //Need the guarantee, that data will be sent to all clients
                 Map<Session, MySharedPresentation> peersMap = MySharedPresentation.getClientsMap();
 
-                String newPicture = graphicFileUtils.getGraphicFileBase64Representation();
                 if (prevPicture == null || newPicture == null)
                     continue;
                 if (prevPicture.equals(newPicture))
@@ -44,9 +60,12 @@ public class TimerGraphicMsgSender implements Runnable {
                         sendResult = WSUtils.sendStringMessage(session, newPicture);
                         Thread.yield();
                     }
+                    if (!prevPicture.equals(newPicture)) {
+                        break;
+                    }
                 }
             } catch (Exception e) {
-                logger.info(ExceptionUtils.createExceptionMessage(e));
+                logger.error(ExceptionUtils.createExceptionMessage(e));
             }
 
         }
