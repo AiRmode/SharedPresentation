@@ -94,6 +94,7 @@ rem ---------------------------------------------------------------------------
 setlocal
 
 rem Suppress Terminate batch job on CTRL+C
+set CATALINA_OPTS=-Xms128m -Xmx1024m -XX:MaxPermSize=256m -Xss512k
 if not ""%1"" == ""run"" goto mainEntry
 if "%TEMP%" == "" goto mainEntry
 if exist "%TEMP%\%~nx0.run" goto mainEntry
