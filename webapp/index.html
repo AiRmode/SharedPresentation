@@ -8,12 +8,22 @@
     <script type="text/javascript" src="jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="jquery.magnific-popup.js"></script>
 
+    <style>
+        body {
+            background-image: url(bejBackGr.jpg);
+            background-color: #c7b39b; /* Цвет фона */
+        }
+        textarea {
+            font-size: 15pt;
+            font-family: Arial;
+        }
+    </style>
 </head>
 <body>
 <h1>My Shared Presentation</h1>
 <canvas id="myCanvas" width="500" height="500" style="border: 1px solid #409401;" onclick="showOriginaImage()"></canvas>
 <br>
-<textarea id="chatlog" rows="16" cols="44"></textarea><br/>
+<textarea id="chatlog" rows="16" cols="44" style="background-color: transparent"></textarea><br/>
 <input id="msg" type="text"/>
 <button type="submit" id="sendButton" onClick="postTextMessageToServer()">Send message</button>
 <br>
