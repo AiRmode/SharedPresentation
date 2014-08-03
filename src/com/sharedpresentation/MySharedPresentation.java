@@ -32,11 +32,6 @@ public class MySharedPresentation {
 
     private GraphicFileUtils graphicFileUtils = new GraphicFileUtils();
 
-    //TODO:Need to create static volatile Queue or thread save list (order is important!) for String messages
-    //and for ByteBuffer messages. Each class will add his received data to this collections
-    //and thread timer will send data to all other clients(peers) and delete each record from collection
-    //separately after sending!
-
     //TODO:add flag, that we will set to "true" when we want to stop all threads!
 
     static {
